@@ -58,7 +58,11 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         
         companyDetails.setCompanyType(transformCompanyType(companyProfileApi.getType()));
         
-        companyDetails.setCompanyStatus(transformCompanyStatus(companyProfileApi.getCompanyStatus()));
+        if (companyProfileApi.getCompanyStatusDetail() != null) {
+            companyDetails.setCompanyStatus(transformCompanyStatus(companyProfileApi.getCompanyStatusDetail()));
+        } else {
+            companyDetails.setCompanyStatus(transformCompanyStatus(companyProfileApi.getCompanyStatus()));
+        }
         
         companyDetails.setCountryOfOrigin(transformCompanyJurisdiction(companyProfileApi.getJurisdiction()));
         
@@ -134,8 +138,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         return date == null ? "" : date.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
     }
 
-    private PreviousName[] transformPreviousNames(List<PreviousCompanyNamesApi> apiPreviousNames) {
-        
+    private PreviousName[] transformPreviousNames(List<PreviousCompanyNamesApi> apiPreviousNames) { 
         if(apiPreviousNames == null) {
             return null;
         }
@@ -151,6 +154,10 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     }
     
     private String[] transformSIC(String[] apiSICArray) {
+        if(apiSICArray == null) {
+            return null;
+        }
+        
         List<String> transformedSICs = new ArrayList<>(); 
         for (String sic : apiSICArray) {
             transformedSICs.add(getValueFromBundle(SIC_BUNDLE_PREFIX + sic));

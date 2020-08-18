@@ -139,7 +139,9 @@
     <th>SICCodes</th>
     <td>
         <table class="datatable">
-        
+        <tr th:unless="*{sicCodes}">
+            <th>SicText</th><td class="break-in-word">None Supplied</td>
+        </tr>
         <tr th:each="sic : *{sicCodes}">
             <th>SicText</th><td class="break-in-word" th:text="${sic}"></td>
         </tr>
