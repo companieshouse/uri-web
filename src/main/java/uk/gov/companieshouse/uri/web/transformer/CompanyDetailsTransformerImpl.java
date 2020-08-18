@@ -115,18 +115,19 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     }
     
     private String transformAccountsType(String accountsType) {
+        if (accountsType == null) {
+            return "";
+        }
         return getValueFromBundle(ACCOUNTS_TYPE_BUNDLE_PREFIX + accountsType);
     }
     
     private String getValueFromBundle(String key) {
-        String value;
         try {
-            value = bundle.getString(key);
+            return bundle.getString(key);
         }
-        catch (MissingResourceException | ClassCastException e) {
-            value = key;
+        catch (MissingResourceException | ClassCastException | NullPointerException e) {
+            return key;
         }
-        return value;
     }
     
     private String transformDate(LocalDate date) {
@@ -134,6 +135,11 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     }
 
     private PreviousName[] transformPreviousNames(List<PreviousCompanyNamesApi> apiPreviousNames) {
+        
+        if(apiPreviousNames == null) {
+            return null;
+        }
+        
         List<PreviousName> transformedPreviousNames = new ArrayList<>(); 
         for (PreviousCompanyNamesApi apiPreviousName : apiPreviousNames) {
             PreviousName previousName = new PreviousName();
