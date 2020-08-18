@@ -14,8 +14,6 @@ import uk.gov.companieshouse.uri.web.service.CompanyService;
 @Controller
 @RequestMapping("/doc/company/")
 public class ViewController {
-
-    static final String TEMPLATE_NAME = "templateName";
     
     private Logger logger;
     
