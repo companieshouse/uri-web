@@ -12,9 +12,7 @@ import uk.gov.companieshouse.uri.web.interceptor.LoggingInterceptor;
 @SpringBootApplication
 public class UriWebApplication implements WebMvcConfigurer {
 
-
     private LoggingInterceptor loggingInterceptor;
-
 
     /**
      * Constructor for UriWebApplication

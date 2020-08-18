@@ -18,10 +18,7 @@
         <skip.unit.tests>false</skip.unit.tests>
 
         <java.version>1.8</java.version>
-        <java-session-handler.version>2.2.0</java-session-handler.version>
-        <private-api-sdk-java.version>2.0.44</private-api-sdk-java.version>
-        <sdk-manager-java.version>1.5.10</sdk-manager-java.version>
-        <rest-service-common-library.version>0.0.3</rest-service-common-library.version>
+        <api-sdk-java.version>4.2.40</api-sdk-java.version>
         <environment-reader-library.version>1.3.2</environment-reader-library.version>
         <structured-logging.version>1.9.0</structured-logging.version>
         <thymeleaf-layout-dialect.version>2.3.0</thymeleaf-layout-dialect.version>
@@ -113,20 +110,14 @@
         <!-- SDKs -->
         <dependency>
             <groupId>uk.gov.companieshouse</groupId>
-            <artifactId>sdk-manager-java</artifactId>
-            <version>${sdk-manager-java.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.gov.companieshouse</groupId>
-            <artifactId>private-api-sdk-java</artifactId>
-            <version>${private-api-sdk-java.version}</version>
+            <artifactId>api-sdk-java</artifactId>
+            <version>${api-sdk-java.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.companieshouse</groupId>
             <artifactId>structured-logging</artifactId>
             <version>${structured-logging.version}</version>
         </dependency>
-
 
         <!-- test -->
         <dependency>

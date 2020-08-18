@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+<head>
+<title>URI</title>
+
+<link rel="alternate" th:href="@{http://data.companieshouse.gov.uk/doc/company/{num}.rdf(num=${company.companyNumber})}"  type="application/rdf+xml">
+<link rel="alternate" th:href="@{http://data.companieshouse.gov.uk/doc/company/{num}.json(num=${company.companyNumber})}" type="application/json">
+<link rel="alternate" th:href="@{http://data.companieshouse.gov.uk/doc/company/{num}.xml(num=${company.companyNumber})}"  type="application/xml">
+<link rel="alternate" th:href="@{http://data.companieshouse.gov.uk/doc/company/{num}.html(num=${company.companyNumber})}" type="text/html">
+<link rel="alternate" th:href="@{http://data.companieshouse.gov.uk/doc/company/{num}.csv(num=${company.companyNumber})}"  type="text/csv">
+<link rel="alternate" th:href="@{http://data.companieshouse.gov.uk/doc/company/{num}.yaml(num=${company.companyNumber})}" type="application/yaml">
+
+<link rel="stylesheet" type="text/css" href="/style/html5reset-1.6.1.css"/>
+<link rel="stylesheet" type="text/css" href="/style/result.css"/>
+
+<!--[if lte IE 8]>
+<link rel="stylesheet" type="text/css" href="/style/ieFix.css" />
+<![endif]-->
+
+</head>
+
+<body th:object="${company}">
+
+<div id="page">
+<div class="site">
+    <a href="http://www.companieshouse.gov.uk/"><img src="http://resources.companieshouse.gov.uk/images/CompaniesHouseNewLogo.png" class="logo"></a>
+
+    <h1 class="break-in-word" th:utext="|*{companyName}<br/>*{companyNumber}<br/>|"></h1>
+
+    <ul class="formats">
+     <li><a th:href="@{/doc/company/{num}.rdf(num=*{companyNumber})}">rdf</a></li>
+     <span th:remove="tag" th:utext="|&lt;!--li&gt;&lt;a href=&quot;/doc/company/*{companyNumber}.ttl&quot;>ttl&lt;/a&gt;&lt;/li--&gt;|"></span>
+     <li><a th:href="@{/doc/company/{num}.json(num=*{companyNumber})}">json</a></li>
+     <li><a th:href="@{/doc/company/{num}.xml(num=*{companyNumber})}">xml</a></li>
+     <li><a th:href="@{/doc/company/{num}.html(num=*{companyNumber})}">html</a></li>
+     <li><a th:href="@{/doc/company/{num}.csv(num=*{companyNumber})}">csv</a></li>
+     <li><a th:href="@{/doc/company/{num}.yaml(num=*{companyNumber})}">yaml</a></li>
+    </ul>
+    
+    <div class="panel">
+	    <div class="section">
+        
+            <table class="datatable">
+<tr>
+    <th>CompanyName</th><td class="break-in-word" th:text="*{companyName}"></td>
+</tr>
+<tr>
+    <th>CompanyNumber</th><td class="break-in-word" th:text="*{companyNumber}"></td>
+</tr>
+<tr>
+    <th>RegAddress</th>
+    <td>
+        <table class="datatable" th:object="${company.registeredOfficeAddress}">
+        <tr th:if="*{addressLine1}">
+            <th>AddressLine1</th><td class="break-in-word" th:text="*{addressLine1}"></td>
+        </tr>
+        <tr th:if="*{addressLine2}">
+            <th>AddressLine2</th><td class="break-in-word" th:text="*{addressLine2}"></td>
+        </tr>
+        <tr th:if="*{postTown}">
+            <th>PostTown</th><td class="break-in-word" th:text="*{postTown}"></td>
+        </tr>
+        <tr th:if="*{region}">
+            <th>County</th><td class="break-in-word" th:text="*{region}"></td>
+        </tr>
+        <tr th:if="*{country}">
+            <th>Country</th><td class="break-in-word" th:text="*{country}"></td>
+        </tr>
+        <tr th:if="*{postCode}">
+            <th>Postcode</th><td class="break-in-word" th:text="*{postCode}"></td>
+        </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <th>CompanyCategory</th><td class="break-in-word" th:text="*{companyType}"></td>
+</tr>
+<tr>
+    <th>CompanyStatus</th><td class="break-in-word" th:text="*{companyStatus}"></td>
+</tr>
+<tr>
+    <th>CountryOfOrigin</th><td class="break-in-word" th:text="*{countryOfOrigin}"></td>
+</tr>
+<tr th:if="*{not #strings.isEmpty(dissolutionDate)}">
+    <th>DissolutionDate</th><td class="break-in-word" th:text="*{dissolutionDate}"></td>
+</tr>
+<tr>
+    <th>IncorporationDate</th><td class="break-in-word" th:text="*{incorporationDate}"></td>
+</tr>
+<tr th:if="*{previousNames}" th:each="previousName : *{previousNames}">
+    <th>PreviousNames</th>
+    <td>
+        <table class="datatable">
+        <tr>
+            <th>CONDate</th><td class="break-in-word" th:text="${previousName.ceasedOn}"></td>
+        </tr>
+        <tr>
+            <th>CompanyName</th><td class="break-in-word" th:text="${previousName.name}"></td>
+        </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <th>Accounts</th>
+    <td>
+        <table class="datatable" th:object="${company.accounts}">
+        <tr>
+            <th>AccountRefDay</th><td class="break-in-word" th:text="*{accountRefDay}"></td>
+        </tr>
+        <tr>
+            <th>AccountRefMonth</th><td class="break-in-word" th:text="*{accountRefMonth}"></td>
+        </tr>
+        <tr>
+            <th>NextDueDate</th><td class="break-in-word" th:text="*{nextDueDate}"></td>
+        </tr>
+        <tr>
+            <th>LastMadeUpDate</th><td class="break-in-word" th:text="*{lastMadeUpDate}"></td>
+        </tr>
+        <tr>
+            <th>AccountCategory</th><td class="break-in-word" th:text="*{accountCategory}"></td>
+        </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <th>Returns</th>
+    <td>
+        <table class="datatable" th:object="${company.returns}">
+        <tr>
+            <th>NextDueDate</th><td class="break-in-word" th:text="*{nextDueDate}"></td>
+        </tr>
+        <tr>
+            <th>LastMadeUpDate</th><td class="break-in-word" th:text="*{lastMadeUpDate}"></td>
+        </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <th>SICCodes</th>
+    <td>
+        <table class="datatable">
+        
+        <tr th:each="sic : *{sicCodes}">
+            <th>SicText</th><td class="break-in-word" th:text="${sic}"></td>
+        </tr>
+        </table>
+    </td>
+</tr>
+</table>
+
+            <a href="http://www.bis.gov.uk/" class="BIS"><span class="hide">Department for Business, Innovation and Skills</span></a>
+
+        </div><!--End of class:section-->
+    </div><!--End of class:panel-->
+</div><!--End of class:site-->
+</div><!--End of id:page-->
+</body>
+</html>
