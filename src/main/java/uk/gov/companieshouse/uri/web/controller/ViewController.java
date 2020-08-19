@@ -15,20 +15,12 @@ import uk.gov.companieshouse.uri.web.service.CompanyService;
 @RequestMapping("/doc/company/")
 public class ViewController {
     
+    @Autowired
     private Logger logger;
     
+    @Autowired
     private CompanyService companyService;
     
-    /**
-     * @param logger - the CH logger
-     * @param companyService - CompanyService responsible for API calls
-     */
-    @Autowired
-    public ViewController(final Logger logger, CompanyService companyService) {
-        this.logger=logger;
-        this.companyService=companyService;
-    }
-
     @GetMapping({"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.html"})
     public String html(Model model, @PathVariable String companyNumber) {
 

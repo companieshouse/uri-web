@@ -65,11 +65,8 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         }
         
         companyDetails.setCountryOfOrigin(transformCompanyJurisdiction(companyProfileApi.getJurisdiction()));
-        
         companyDetails.setDissolutionDate(transformDate(companyProfileApi.getDateOfCessation()));
-        
         companyDetails.setIncorporationDate(transformDate(companyProfileApi.getDateOfCreation()));
-        
         companyDetails.setPreviousNames(transformPreviousNames(companyProfileApi.getPreviousCompanyNames()));
         
         Accounts accounts = new Accounts();
