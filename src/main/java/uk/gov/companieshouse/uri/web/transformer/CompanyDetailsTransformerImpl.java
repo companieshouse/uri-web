@@ -140,7 +140,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
 
     private PreviousName[] transformPreviousNames(List<PreviousCompanyNamesApi> apiPreviousNames) { 
         if(apiPreviousNames == null) {
-            return null;
+            return new PreviousName[0];
         }
         
         List<PreviousName> transformedPreviousNames = new ArrayList<>(); 
@@ -150,12 +150,12 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
             previousName.setName(apiPreviousName.getName());
             transformedPreviousNames.add(previousName);
         }
-        return transformedPreviousNames.toArray(new PreviousName[transformedPreviousNames.size()]);
+        return transformedPreviousNames.toArray(new PreviousName[0]);
     }
     
     private String[] transformSIC(String[] apiSICArray) {
         if(apiSICArray == null) {
-            return null;
+            return new String[0];
         }
         
         List<String> transformedSICs = new ArrayList<>(); 
