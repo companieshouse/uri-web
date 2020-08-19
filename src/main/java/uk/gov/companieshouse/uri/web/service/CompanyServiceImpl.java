@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.uri.web.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.logging.Logger;
@@ -11,15 +10,24 @@ import uk.gov.companieshouse.uri.web.transformer.CompanyDetailsTransformer;
 @Service
 public class CompanyServiceImpl implements CompanyService {
     
-    @Autowired
     private ApiService apiService;
     
-    @Autowired
     private CompanyDetailsTransformer companyDetailsTransformer;
     
-    @Autowired
     private Logger logger;
-
+    
+    /**
+     * Constructor
+     *
+     * @param apiService calls CompanyProfile API
+     * @param companyDetailsTransformer for transform to CompanyDetails model
+     */
+    public CompanyServiceImpl(ApiService apiService, CompanyDetailsTransformer companyDetailsTransformer, Logger logger) {
+        this.apiService = apiService;
+        this.companyDetailsTransformer = companyDetailsTransformer;
+        this.logger = logger;
+    }
+    
     @Override
     public CompanyDetails getCompanyDetails(String companyNumber) {
         CompanyProfileApi companyProfileApi = apiService.getCompanyProfile(companyNumber);
