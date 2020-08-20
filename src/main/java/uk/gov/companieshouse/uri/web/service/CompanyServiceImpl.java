@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.uri.web.service;
 
 import org.springframework.stereotype.Service;
+
+import uk.gov.companieshouse.api.model.charges.ChargesApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.uri.web.exception.ServiceException;
@@ -32,13 +34,27 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyDetails getCompanyDetails(String companyNumber) {
         CompanyProfileApi companyProfileApi = apiService.getCompanyProfile(companyNumber);
         
+        CompanyDetails companyDetails;
         try {
-            return companyDetailsTransformer.profileApiToDetails(companyProfileApi);
+            companyDetails = companyDetailsTransformer.profileApiToDetails(companyProfileApi);
         }
         catch (RuntimeException e) {
             logger.error("Exception during transform of companyProfileApi", e);
             throw new ServiceException("Error transforming company profile", e);
         }
+        
+        if (companyDetails.isHasCharges()) {
+            ChargesApi chargesApi = apiService.getCharges(companyNumber);
+            try {
+                companyDetails.setMortgageTotals(companyDetailsTransformer.chargesApiToMortgageTotals(chargesApi));
+            }
+            catch (RuntimeException e) {
+                logger.error("Exception during transform of chargesApi", e);
+                throw new ServiceException("Error transforming charges", e);
+            }
+        }
+        return companyDetails;
+        
     }
 }
 

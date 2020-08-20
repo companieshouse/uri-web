@@ -9,6 +9,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.http.ApiKeyHttpClient;
 import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.api.model.charges.ChargesApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.uri.web.exception.ServiceException;
@@ -16,7 +17,12 @@ import uk.gov.companieshouse.uri.web.exception.ServiceException;
 @Service
 public class ApiServiceImpl implements ApiService {
 
-    private static final UriTemplate GET_COMPANY_URI = new UriTemplate("/company/{companyNumber}");
+    private static final UriTemplate GET_COMPANY_URI = new UriTemplate("/company/{companyNumber}");    
+    private static final UriTemplate GET_CHARGES_URI = new UriTemplate("/company/{companyNumber}/charges");
+    
+    private static final String FAILED_COMPANY_PROFILE_PREFIX = "Failed to get company profile from: ";
+    private static final String FAILED_CHARGES_PREFIX = "Failed to get charges from: ";
+    private static final String FAILED_SUFFIX = ", due to exception:";
     
     @Value("${chs.api.key}")
     private String chsApiKey;
@@ -31,21 +37,36 @@ public class ApiServiceImpl implements ApiService {
 
         String uri = GET_COMPANY_URI.expand(companyNumber).toString();
 
-        CompanyProfileApi companyProfileApi;
         try {
-            logger.debug("About to call api for " + companyNumber);
+            logger.debug("About to call companyProfile api for " + companyNumber);
             ApiResponse<CompanyProfileApi> response = getApiClient().company().get(uri).execute();
-            companyProfileApi = response.getData();
+            return response.getData();
             
         } catch (ApiErrorResponseException e) {
-            logger.debug("Failed to get company profile from: " + uri + ", due to exception:" + e);
+            logger.debug(FAILED_COMPANY_PROFILE_PREFIX + uri + FAILED_SUFFIX + e);
             throw new ServiceException("Error retrieving company profile", e);
         } catch (URIValidationException e) {
-            logger.debug("Failed to get company profile from: " + uri + ", due to exception:" + e);
+            logger.debug(FAILED_COMPANY_PROFILE_PREFIX + uri + FAILED_SUFFIX + e);
             throw new ServiceException("Invalid URI for company resource", e);
         }
-        
-        return companyProfileApi;
+    }
+    
+    public ChargesApi getCharges(String companyNumber) { 
+
+        String uri = GET_CHARGES_URI.expand(companyNumber).toString();
+
+        try {
+            logger.debug("About to call charges api for " + companyNumber);
+            ApiResponse<ChargesApi> response = getApiClient().charges().get(uri).execute();
+            return response.getData();
+            
+        } catch (ApiErrorResponseException e) {
+            logger.debug(FAILED_CHARGES_PREFIX + uri + FAILED_SUFFIX + e);
+            throw new ServiceException("Error retrieving charges", e);
+        } catch (URIValidationException e) {
+            logger.debug(FAILED_CHARGES_PREFIX + uri + FAILED_SUFFIX + e);
+            throw new ServiceException("Invalid URI for charges resource", e);
+        }
     }
     
     public ApiClient getApiClient() {
