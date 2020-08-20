@@ -35,7 +35,7 @@ public class CompanyServiceImpl implements CompanyService {
         try {
             return companyDetailsTransformer.profileApiToDetails(companyProfileApi);
         }
-        catch (Exception e) {
+        catch (RuntimeException e) {
             logger.error("Exception during transform of companyProfileApi", e);
             throw new ServiceException("Error transforming company profile", e);
         }

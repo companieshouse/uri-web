@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import uk.gov.companieshouse.api.model.company.AnnualReturnApi;
@@ -32,9 +31,13 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     private static final String ACCOUNTS_TYPE_BUNDLE_PREFIX = "transform.accounts.";
     private static final String SIC_BUNDLE_PREFIX = "transform.sic.";
     
-    @Autowired
     private ResourceBundle bundle;
     
+    
+    public CompanyDetailsTransformerImpl(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
     @Override
     public CompanyDetails profileApiToDetails(CompanyProfileApi companyProfileApi) {
         
@@ -45,15 +48,17 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         
         Address detailsAddress = new Address();
         RegisteredOfficeAddressApi apiAddress = companyProfileApi.getRegisteredOfficeAddress();
-        detailsAddress.setCareOf(upper(apiAddress.getCareOf()));
-        detailsAddress.setPoBox(upper(apiAddress.getPoBox()));
-        detailsAddress.setPremises(upper(apiAddress.getPremises()));
-        detailsAddress.setAddressLine1(upper(apiAddress.getAddressLine1()));
-        detailsAddress.setAddressLine2(upper(apiAddress.getAddressLine2()));
-        detailsAddress.setPostTown(upper(apiAddress.getLocality()));
-        detailsAddress.setRegion(upper(apiAddress.getRegion()));
-        detailsAddress.setCountry(upper(apiAddress.getCountry()));
-        detailsAddress.setPostCode(upper(apiAddress.getPostalCode()));
+        if (apiAddress != null) {
+            detailsAddress.setCareOf(upper(apiAddress.getCareOf()));
+            detailsAddress.setPoBox(upper(apiAddress.getPoBox()));
+            detailsAddress.setPremises(upper(apiAddress.getPremises()));
+            detailsAddress.setAddressLine1(upper(apiAddress.getAddressLine1()));
+            detailsAddress.setAddressLine2(upper(apiAddress.getAddressLine2()));
+            detailsAddress.setPostTown(upper(apiAddress.getLocality()));
+            detailsAddress.setRegion(upper(apiAddress.getRegion()));
+            detailsAddress.setCountry(upper(apiAddress.getCountry()));
+            detailsAddress.setPostCode(upper(apiAddress.getPostalCode()));
+        }
         companyDetails.setRegisteredOfficeAddress(detailsAddress);
         
         companyDetails.setCompanyType(transformCompanyType(companyProfileApi.getType()));
@@ -71,12 +76,14 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         
         Accounts accounts = new Accounts();
         CompanyAccountApi apiAccounts = companyProfileApi.getAccounts();
-        accounts.setAccountRefDay(apiAccounts.getAccountingReferenceDate().getDay());
-        accounts.setAccountRefMonth(apiAccounts.getAccountingReferenceDate().getMonth());
-        accounts.setNextDueDate(transformDate(apiAccounts.getNextDue()));
-        LastAccountsApi apiLastAccounts = apiAccounts.getLastAccounts();
-        accounts.setLastMadeUpDate(transformDate(apiLastAccounts.getMadeUpTo()));
-        accounts.setAccountCategory(transformAccountsType(apiLastAccounts.getType()));
+        if (apiAccounts != null) {
+            accounts.setAccountRefDay(apiAccounts.getAccountingReferenceDate().getDay());
+            accounts.setAccountRefMonth(apiAccounts.getAccountingReferenceDate().getMonth());
+            accounts.setNextDueDate(transformDate(apiAccounts.getNextDue()));
+            LastAccountsApi apiLastAccounts = apiAccounts.getLastAccounts();
+            accounts.setLastMadeUpDate(transformDate(apiLastAccounts.getMadeUpTo()));
+            accounts.setAccountCategory(transformAccountsType(apiLastAccounts.getType()));
+        }
         companyDetails.setAccounts(accounts);
         
         Returns returns = new Returns();

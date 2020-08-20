@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.uri.web.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -22,8 +21,11 @@ public class ApiServiceImpl implements ApiService {
     @Value("${chs.api.key}")
     private String chsApiKey;
     
-    @Autowired
     private Logger logger;
+    
+    public ApiServiceImpl(final Logger logger) {
+        this.logger = logger;
+    }
     
     public CompanyProfileApi getCompanyProfile(String companyNumber) { 
 
@@ -46,7 +48,7 @@ public class ApiServiceImpl implements ApiService {
         return companyProfileApi;
     }
     
-    protected ApiClient getApiClient() {
+    public ApiClient getApiClient() {
         ApiKeyHttpClient httpClient = new ApiKeyHttpClient(chsApiKey);
         return new ApiClient(httpClient);
     }

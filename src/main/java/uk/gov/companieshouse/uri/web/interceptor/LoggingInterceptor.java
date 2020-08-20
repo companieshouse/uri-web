@@ -15,7 +15,6 @@ import uk.gov.companieshouse.logging.util.RequestLogger;
 @Component
 public class LoggingInterceptor extends HandlerInterceptorAdapter implements RequestLogger {
 
-    @SuppressWarnings("squid:S1312") // Loggers should be private static final; here logger is singleton bean
     private Logger logger;
 
     /**

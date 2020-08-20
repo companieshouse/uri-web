@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.uri.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +14,19 @@ import uk.gov.companieshouse.uri.web.service.CompanyService;
 @RequestMapping("/doc/company/")
 public class ViewController {
     
-    @Autowired
     private Logger logger;
     
-    @Autowired
     private CompanyService companyService;
     
+    /**
+     * @param logger - the CH logger
+     * @param companyService - CompanyService responsible for API calls
+     */
+    public ViewController(final Logger logger, CompanyService companyService) {
+        this.logger=logger;
+        this.companyService=companyService;
+    }
+
     @GetMapping({"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.html"})
     public String html(Model model, @PathVariable String companyNumber) {
 
