@@ -43,7 +43,7 @@ public class CompanyServiceImpl implements CompanyService {
             throw new ServiceException("Error transforming company profile", e);
         }
         
-        if (companyDetails.isHasCharges()) {
+        if (companyDetails.hasCharges()) {
             ChargesApi chargesApi = apiService.getCharges(companyNumber);
             try {
                 companyDetails.setMortgageTotals(companyDetailsTransformer.chargesApiToMortgageTotals(chargesApi));

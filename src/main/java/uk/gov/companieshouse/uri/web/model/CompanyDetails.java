@@ -104,7 +104,7 @@ public class CompanyDetails {
         this.companyType = companyType;
     }
 
-    public boolean isHasCharges() {
+    public boolean hasCharges() {
         return hasCharges;
     }
 
