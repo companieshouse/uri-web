@@ -32,8 +32,7 @@ import uk.gov.companieshouse.uri.web.exception.ServiceException;
 @ExtendWith(MockitoExtension.class)
 class ApiServiceImplTest {
 
-    private static final String GET_COMPANY_URI_PREFIX = "/company/";
-    private static final String GET_CHARGES_URI_PREFIX = "/company/";
+    private static final String URI_PREFIX = "/company/";
     private static final String GET_CHARGES_URI_SUFFIX = "/charges";
     private static final String CHS_API_KEY = "bu8G-WVuMIcMA467mX7M1W03SGcti6LP5Bod2yqX";
     private static final String COMPANY_NUMBER = "05448736";
@@ -84,7 +83,7 @@ class ApiServiceImplTest {
         
         assertEquals(COMPANY_NUMBER, companyProfileApi.getCompanyNumber());
         verify(mockApiClient, times(1)).company();
-        verify(companyResourceHandler,times(1)).get(GET_COMPANY_URI_PREFIX + COMPANY_NUMBER);
+        verify(companyResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER);
         verify(companyGet, times(1)).execute();
     }
     
@@ -99,7 +98,7 @@ class ApiServiceImplTest {
 
         assertEquals("Error retrieving company profile", exception.getMessage());
         verify(mockApiClient, times(1)).company();
-        verify(companyResourceHandler,times(1)).get(GET_COMPANY_URI_PREFIX + COMPANY_NUMBER);
+        verify(companyResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER);
         verify(companyGet, times(1)).execute();
     }
     
@@ -114,7 +113,7 @@ class ApiServiceImplTest {
 
         assertEquals("Invalid URI for company resource", exception.getMessage());
         verify(mockApiClient, times(1)).company();
-        verify(companyResourceHandler,times(1)).get(GET_COMPANY_URI_PREFIX + COMPANY_NUMBER);
+        verify(companyResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER);
         verify(companyGet, times(1)).execute();
     }
     
@@ -129,7 +128,7 @@ class ApiServiceImplTest {
         
         assertEquals(99l, chargesApi.getTotalCount());
         verify(mockApiClient, times(1)).charges();
-        verify(chargesResourceHandler,times(1)).get(GET_CHARGES_URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX);
+        verify(chargesResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX);
         verify(chargesGet, times(1)).execute();
     }
     
@@ -144,7 +143,7 @@ class ApiServiceImplTest {
 
         assertEquals("Error retrieving charges", exception.getMessage());
         verify(mockApiClient, times(1)).charges();
-        verify(chargesResourceHandler,times(1)).get(GET_CHARGES_URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX);
+        verify(chargesResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX);
         verify(chargesGet, times(1)).execute();
     }
     
@@ -159,7 +158,7 @@ class ApiServiceImplTest {
 
         assertEquals("Invalid URI for charges resource", exception.getMessage());
         verify(mockApiClient, times(1)).charges();
-        verify(chargesResourceHandler,times(1)).get(GET_CHARGES_URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX);
+        verify(chargesResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX);
         verify(chargesGet, times(1)).execute();
     }
     
@@ -176,13 +175,13 @@ class ApiServiceImplTest {
     
     private void mockCompanyProfileApiCall() throws ApiErrorResponseException, URIValidationException {
         when(mockApiClient.company()).thenReturn(companyResourceHandler);
-        when(companyResourceHandler.get(GET_COMPANY_URI_PREFIX + COMPANY_NUMBER)).thenReturn(companyGet);
+        when(companyResourceHandler.get(URI_PREFIX + COMPANY_NUMBER)).thenReturn(companyGet);
         when(companyGet.execute()).thenReturn(companyProfileApiResponse);
     }
     
     private void mockChargesApiCall() throws ApiErrorResponseException, URIValidationException {
         when(mockApiClient.charges()).thenReturn(chargesResourceHandler);
-        when(chargesResourceHandler.get(GET_CHARGES_URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX)).thenReturn(chargesGet);
+        when(chargesResourceHandler.get(URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX)).thenReturn(chargesGet);
         when(chargesGet.execute()).thenReturn(chargesApiResponse);
     }
 }
