@@ -2,35 +2,56 @@ package uk.gov.companieshouse.uri.web.model;
 
 import java.util.Arrays;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CompanyDetails {
 
-    private Accounts accounts;
-
-    private Returns returns;
-
+    @JsonProperty(value = "CompanyName")
     private String companyName;
 
+    @JsonProperty(value = "CompanyNumber")
     private String companyNumber;
-
-    private String companyStatus;
-
-    private String incorporationDate;
     
-    private String dissolutionDate;
-    
-    private PreviousName[] previousNames;
-    
-    private String companyType;
-
-    private boolean hasCharges;
-
-    private String countryOfOrigin;
-
+    @JsonProperty(value = "RegAddress")
     private Address registeredOfficeAddress;
 
-    private String[] sicCodes;
+    @JsonProperty(value = "CompanyCategory")
+    private String companyType;
     
+    @JsonProperty(value = "CompanyStatus")
+    private String companyStatus;
+    
+    @JsonProperty(value = "CountryOfOrigin")
+    private String countryOfOrigin;
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonProperty(value = "DissolutionDate")
+    private String dissolutionDate;
+    
+    @JsonProperty(value = "IncorporationDate")
+    private String incorporationDate;
+    
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonProperty(value = "PreviousNames")
+    private PreviousName[] previousNames;
+    
+    @JsonProperty(value = "Accounts")
+    private Accounts accounts;
+
+    @JsonProperty(value = "Returns")
+    private Returns returns;
+    
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonProperty(value = "Mortgages")
     private MortgageTotals mortgageTotals;
+    
+    @JsonIgnore
+    private boolean hasCharges;
+
+    @JsonProperty(value = "SICCodes")
+    private SicCodes sicCodes;
 
     public Accounts getAccounts() {
         return accounts;
@@ -128,11 +149,11 @@ public class CompanyDetails {
         this.registeredOfficeAddress = registeredOfficeAddress;
     }
 
-    public String[] getSicCodes() {
+    public SicCodes getSicCodes() {
         return sicCodes;
     }
 
-    public void setSicCodes(String[] sicCodes) {
+    public void setSicCodes(SicCodes sicCodes) {
         this.sicCodes = sicCodes;
     }
 
@@ -172,7 +193,7 @@ public class CompanyDetails {
         builder.append(", registeredOfficeAddress=");
         builder.append(registeredOfficeAddress);
         builder.append(", sicCodes=");
-        builder.append(Arrays.toString(sicCodes));
+        builder.append(sicCodes);
         builder.append(", mortgageTotals=");
         builder.append(mortgageTotals);
         builder.append("]");

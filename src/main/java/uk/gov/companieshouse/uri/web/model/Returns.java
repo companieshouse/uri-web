@@ -1,9 +1,13 @@
 package uk.gov.companieshouse.uri.web.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Returns {
     
+    @JsonProperty(value = "NextDueDate")
     private String nextDueDate;
     
+    @JsonProperty(value = "LastMadeUpDate")
     private String lastMadeUpDate;
 
     public String getNextDueDate() {

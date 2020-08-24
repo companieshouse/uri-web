@@ -51,6 +51,12 @@
     <th>RegAddress</th>
     <td>
         <table class="datatable" th:object="${company.registeredOfficeAddress}">
+        <tr th:if="*{careOf}">
+            <th>CareofName</th><td class="break-in-word" th:text="*{careOf}"></td>
+        </tr>
+        <tr th:if="*{poBox}">
+            <th>PoBox</th><td class="break-in-word" th:text="*{poBox}"></td>
+        </tr>
         <tr th:if="*{addressLine1}">
             <th>AddressLine1</th><td class="break-in-word" th:text="*{addressLine1}"></td>
         </tr>
@@ -81,7 +87,7 @@
 <tr>
     <th>CountryOfOrigin</th><td class="break-in-word" th:text="*{countryOfOrigin}"></td>
 </tr>
-<tr th:if="*{not #strings.isEmpty(dissolutionDate)}">
+<tr th:if="*{dissolutionDate}">
     <th>DissolutionDate</th><td class="break-in-word" th:text="*{dissolutionDate}"></td>
 </tr>
 <tr>
@@ -157,11 +163,8 @@
 <tr>
     <th>SICCodes</th>
     <td>
-        <table class="datatable">
-        <tr th:if="*{#lists.isEmpty(sicCodes)}">
-            <th>SicText</th><td class="break-in-word">None Supplied</td>
-        </tr>
-        <tr th:each="sic : *{sicCodes}">
+        <table class="datatable" th:object="${company.sicCodes}">
+        <tr th:each="sic : *{sicText}">
             <th>SicText</th><td class="break-in-word" th:text="${sic}"></td>
         </tr>
         </table>

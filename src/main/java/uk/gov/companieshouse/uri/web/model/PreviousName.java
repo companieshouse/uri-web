@@ -1,11 +1,14 @@
 package uk.gov.companieshouse.uri.web.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PreviousName {
 
     String ceasedOn;
     
     String name;
 
+    @JsonProperty("CONDate")
     public String getCeasedOn() {
         return ceasedOn;
     }
@@ -14,6 +17,7 @@ public class PreviousName {
         this.ceasedOn = ceasedOn;
     }
 
+    @JsonProperty("CompanyName")
     public String getName() {
         return name;
     }

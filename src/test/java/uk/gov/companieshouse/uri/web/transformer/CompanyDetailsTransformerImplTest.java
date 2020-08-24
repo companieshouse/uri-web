@@ -24,6 +24,7 @@ import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.uri.web.model.CompanyDetails;
 import uk.gov.companieshouse.uri.web.model.MortgageTotals;
+import uk.gov.companieshouse.uri.web.model.SicCodes;
 import uk.gov.companieshouse.uri.web.transformer.CompanyDetailsTransformer;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,8 +43,8 @@ class CompanyDetailsTransformerImplTest {
         
         assertEquals(null, companyDetails.getCompanyNumber());
         assertEquals(null, companyDetails.getCompanyName());
-        assertEquals("", companyDetails.getIncorporationDate());
-        assertEquals("", companyDetails.getDissolutionDate());
+        assertEquals(null, companyDetails.getIncorporationDate());
+        assertEquals(null, companyDetails.getDissolutionDate());
         assertEquals("transform.status.null", companyDetails.getCompanyStatus());
         assertEquals("transform.type.null", companyDetails.getCompanyType());
         assertEquals("transform.jurisdiction.null", companyDetails.getCountryOfOrigin());
@@ -64,7 +65,8 @@ class CompanyDetailsTransformerImplTest {
         assertEquals(null, companyDetails.getRegisteredOfficeAddress().getRegion());
         assertEquals(null, companyDetails.getRegisteredOfficeAddress().getCountry());
         assertEquals(null, companyDetails.getRegisteredOfficeAddress().getPostCode());
-        assertEquals(0, companyDetails.getSicCodes().length);
+        assertEquals(1, companyDetails.getSicCodes().getSicText().length);
+        assertEquals("None Supplied", companyDetails.getSicCodes().getSicText()[0]);
     }
     
     @Test
@@ -99,9 +101,10 @@ class CompanyDetailsTransformerImplTest {
         assertEquals("GLOUCESTERSHIRE", companyDetails.getRegisteredOfficeAddress().getRegion());
         assertEquals("ENGLAND", companyDetails.getRegisteredOfficeAddress().getCountry());
         assertEquals("GL11 6HY", companyDetails.getRegisteredOfficeAddress().getPostCode());
-        assertEquals(2, companyDetails.getSicCodes().length);
-        assertEquals("transform.sic.51110", companyDetails.getSicCodes()[0]);
-        assertEquals("transform.sic.23423", companyDetails.getSicCodes()[1]);
+        SicCodes sicCodes = companyDetails.getSicCodes();
+        assertEquals(2, sicCodes.getSicText().length);
+        assertEquals("transform.sic.51110", sicCodes.getSicText()[0]);
+        assertEquals("transform.sic.23423", sicCodes.getSicText()[1]);
     }
     
     @Test
@@ -150,6 +153,17 @@ class CompanyDetailsTransformerImplTest {
         CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
         
         assertEquals("", companyDetails.getAccounts().getAccountCategory());
+    }
+    
+    @Test
+    void profileApiToDetailsNullAccountingReferenceDateApi() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.getAccounts().setAccountingReferenceDate(null);
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals(null, companyDetails.getAccounts().getAccountRefDay());
+        assertEquals(null, companyDetails.getAccounts().getAccountRefMonth());
     }
     
     private CompanyProfileApi populatedCompanyProfileApi() {

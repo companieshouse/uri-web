@@ -1,13 +1,26 @@
 package uk.gov.companieshouse.uri.web.model;
 
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 public class MortgageTotals {
     
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty(value = "NumMortCharges")
     private int numMortCharges;
     
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty(value = "NumMortOutstanding")
     private int numMortOutstanding;
     
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty(value = "NumMortPartSatisfied")
     private int numMortPartSatisfied;
     
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty(value = "NumMortSatisfied")
     private int numMortSatisfied;
 
     public int getNumMortCharges() {

@@ -1,24 +1,37 @@
 package uk.gov.companieshouse.uri.web.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Address {
 
+    @JsonProperty(value = "CareofName")
+    private String careOf;
+    
+    @JsonProperty(value = "PoBox")
+    private String poBox;
+    
+    @JsonProperty(value = "Premises")
+    private String premises;
+    
+    @JsonProperty(value = "AddressLine1")
     private String addressLine1;
 
+    @JsonProperty(value = "AddressLine2")
     private String addressLine2;
 
-    private String careOf;
-
+    @JsonProperty(value = "PostTown")
+    private String postTown;
+    
+    @JsonProperty(value = "County")
+    private String region;
+    
+    @JsonProperty(value = "Country")
     private String country;
 
-    private String postTown;
-
-    private String poBox;
-
+    @JsonProperty(value = "Postcode")
     private String postCode;
-
-    private String premises;
-
-    private String region;
 
     public String getAddressLine1() {
         return addressLine1;
