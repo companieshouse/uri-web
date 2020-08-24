@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import org.springframework.stereotype.Component;
 
+import uk.gov.companieshouse.api.model.charges.ChargesApi;
 import uk.gov.companieshouse.api.model.company.AnnualReturnApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.ConfirmationStatementApi;
@@ -19,6 +20,7 @@ import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.uri.web.model.Accounts;
 import uk.gov.companieshouse.uri.web.model.Address;
 import uk.gov.companieshouse.uri.web.model.CompanyDetails;
+import uk.gov.companieshouse.uri.web.model.MortgageTotals;
 import uk.gov.companieshouse.uri.web.model.PreviousName;
 import uk.gov.companieshouse.uri.web.model.Returns;
 
@@ -103,7 +105,23 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         
         companyDetails.setSicCodes(transformSIC(companyProfileApi.getSicCodes()));
         
+        companyDetails.setHasCharges(companyProfileApi.isHasCharges());
+        
         return companyDetails;
+    }
+    
+    @Override
+    public MortgageTotals chargesApiToMortgageTotals(ChargesApi chargesApi) {
+        MortgageTotals mortgageTotals = new MortgageTotals();
+        
+        mortgageTotals.setNumMortCharges(transformChargeCount(chargesApi.getTotalCount()));
+        mortgageTotals.setNumMortSatisfied(transformChargeCount(chargesApi.getSatisfiedCount()));
+        mortgageTotals.setNumMortPartSatisfied(transformChargeCount(chargesApi.getPartSatisfiedCount()));
+        mortgageTotals.setNumMortOutstanding(mortgageTotals.getNumMortCharges()
+                - mortgageTotals.getNumMortSatisfied() 
+                - mortgageTotals.getNumMortPartSatisfied());
+        
+        return mortgageTotals;
     }
     
     private String upper(String value) {
@@ -167,5 +185,9 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
             transformedSICs.add(getValueFromBundle(SIC_BUNDLE_PREFIX + sic));
         }
         return transformedSICs.toArray(apiSICArray);
+    }
+    
+    private int transformChargeCount(Long count) {      
+        return count == null ? 0 : count.intValue();   
     }
 }

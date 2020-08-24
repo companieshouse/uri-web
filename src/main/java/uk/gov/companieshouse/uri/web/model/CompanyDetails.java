@@ -29,6 +29,8 @@ public class CompanyDetails {
     private Address registeredOfficeAddress;
 
     private String[] sicCodes;
+    
+    private MortgageTotals mortgageTotals;
 
     public Accounts getAccounts() {
         return accounts;
@@ -102,7 +104,7 @@ public class CompanyDetails {
         this.companyType = companyType;
     }
 
-    public boolean isHasCharges() {
+    public boolean hasCharges() {
         return hasCharges;
     }
 
@@ -134,10 +136,18 @@ public class CompanyDetails {
         this.sicCodes = sicCodes;
     }
 
+    public MortgageTotals getMortgageTotals() {
+        return mortgageTotals;
+    }
+
+    public void setMortgageTotals(MortgageTotals mortgageTotals) {
+        this.mortgageTotals = mortgageTotals;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Company [accounts=");
+        builder.append("CompanyDetails [accounts=");
         builder.append(accounts);
         builder.append(", returns=");
         builder.append(returns);
@@ -163,6 +173,8 @@ public class CompanyDetails {
         builder.append(registeredOfficeAddress);
         builder.append(", sicCodes=");
         builder.append(Arrays.toString(sicCodes));
+        builder.append(", mortgageTotals=");
+        builder.append(mortgageTotals);
         builder.append("]");
         return builder.toString();
     }

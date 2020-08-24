@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import uk.gov.companieshouse.api.model.charges.ChargesApi;
 import uk.gov.companieshouse.api.model.company.AnnualReturnApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.ConfirmationStatementApi;
@@ -22,6 +23,7 @@ import uk.gov.companieshouse.api.model.company.account.AccountingReferenceDateAp
 import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.uri.web.model.CompanyDetails;
+import uk.gov.companieshouse.uri.web.model.MortgageTotals;
 import uk.gov.companieshouse.uri.web.transformer.CompanyDetailsTransformer;
 
 @ExtendWith(MockitoExtension.class)
@@ -206,6 +208,31 @@ class CompanyDetailsTransformerImplTest {
         companyProfileApi.setSicCodes(sicCodes);
         
         return companyProfileApi;
+    }
+    
+    @Test
+    void chargesApiToMortgageTotalsEmptyChargesApi() {
+        MortgageTotals mortgageTotals = testCompanyDetailsTransformer.chargesApiToMortgageTotals(new ChargesApi());
+        
+        assertEquals(0, mortgageTotals.getNumMortCharges());
+        assertEquals(0, mortgageTotals.getNumMortSatisfied());
+        assertEquals(0, mortgageTotals.getNumMortPartSatisfied());
+        assertEquals(0, mortgageTotals.getNumMortOutstanding());
+    }
+    
+    @Test
+    void chargesApiToMortgageTotalsPopulatedChargesApi() {
+        ChargesApi chargesApi = new ChargesApi();
+        chargesApi.setTotalCount(21l);
+        chargesApi.setSatisfiedCount(5l);
+        chargesApi.setPartSatisfiedCount(2l);
+        
+        MortgageTotals mortgageTotals = testCompanyDetailsTransformer.chargesApiToMortgageTotals(chargesApi);
+        
+        assertEquals(21, mortgageTotals.getNumMortCharges());
+        assertEquals(5, mortgageTotals.getNumMortSatisfied());
+        assertEquals(2, mortgageTotals.getNumMortPartSatisfied());
+        assertEquals(14, mortgageTotals.getNumMortOutstanding());
     }
     
     class MsgResourceBundle extends ListResourceBundle {

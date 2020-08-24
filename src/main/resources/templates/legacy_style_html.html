@@ -135,6 +135,25 @@
         </table>
     </td>
 </tr>
+<tr th:if="*{mortgageTotals}">
+    <th>Mortgages</th>
+    <td>
+        <table class="datatable" th:object="${company.mortgageTotals}">
+        <tr>
+            <th>NumMortCharges</th><td class="break-in-word" th:text="*{numMortCharges}"></td>
+        </tr>
+        <tr>
+            <th>NumMortOutstanding</th><td class="break-in-word" th:text="*{numMortOutstanding}"></td>
+        </tr>
+        <tr>
+            <th>NumMortPartSatisfied</th><td class="break-in-word" th:text="*{numMortPartSatisfied}"></td>
+        </tr>
+        <tr>
+            <th>NumMortSatisfied</th><td class="break-in-word" th:text="*{numMortSatisfied}"></td>
+        </tr>
+        </table>
+    </td>
+</tr>
 <tr>
     <th>SICCodes</th>
     <td>
