@@ -15,6 +15,7 @@ import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.ConfirmationStatementApi;
 import uk.gov.companieshouse.api.model.company.PreviousCompanyNamesApi;
 import uk.gov.companieshouse.api.model.company.RegisteredOfficeAddressApi;
+import uk.gov.companieshouse.api.model.company.account.AccountingReferenceDateApi;
 import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.uri.web.model.Accounts;
@@ -23,6 +24,7 @@ import uk.gov.companieshouse.uri.web.model.CompanyDetails;
 import uk.gov.companieshouse.uri.web.model.MortgageTotals;
 import uk.gov.companieshouse.uri.web.model.PreviousName;
 import uk.gov.companieshouse.uri.web.model.Returns;
+import uk.gov.companieshouse.uri.web.model.SicCodes;
 
 @Component
 public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer {
@@ -32,6 +34,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     private static final String JURISDICTION_BUNDLE_PREFIX = "transform.jurisdiction.";
     private static final String ACCOUNTS_TYPE_BUNDLE_PREFIX = "transform.accounts.";
     private static final String SIC_BUNDLE_PREFIX = "transform.sic.";
+    private static final String NO_SIC_AVAILABLE = "None Supplied";
     
     private ResourceBundle bundle;
     
@@ -79,8 +82,11 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         Accounts accounts = new Accounts();
         CompanyAccountApi apiAccounts = companyProfileApi.getAccounts();
         if (apiAccounts != null) {
-            accounts.setAccountRefDay(apiAccounts.getAccountingReferenceDate().getDay());
-            accounts.setAccountRefMonth(apiAccounts.getAccountingReferenceDate().getMonth());
+            AccountingReferenceDateApi accountingRefernceDateApi = apiAccounts.getAccountingReferenceDate();
+            if (accountingRefernceDateApi != null) {
+                accounts.setAccountRefDay(accountingRefernceDateApi.getDay());
+                accounts.setAccountRefMonth(accountingRefernceDateApi.getMonth());
+            }
             accounts.setNextDueDate(transformDate(apiAccounts.getNextDue()));
             LastAccountsApi apiLastAccounts = apiAccounts.getLastAccounts();
             accounts.setLastMadeUpDate(transformDate(apiLastAccounts.getMadeUpTo()));
@@ -157,7 +163,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     }
     
     private String transformDate(LocalDate date) {
-        return date == null ? "" : date.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
+        return date == null ? null : date.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
     }
 
     private PreviousName[] transformPreviousNames(List<PreviousCompanyNamesApi> apiPreviousNames) { 
@@ -175,16 +181,19 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         return transformedPreviousNames.toArray(new PreviousName[0]);
     }
     
-    private String[] transformSIC(String[] apiSICArray) {
+    private SicCodes transformSIC(String[] apiSICArray) {
+        SicCodes sicCodes = new SicCodes();
         if(apiSICArray == null) {
-            return new String[0];
+            sicCodes.setSicCodes(new String[]{NO_SIC_AVAILABLE});
+            return sicCodes;
         }
         
         List<String> transformedSICs = new ArrayList<>(); 
         for (String sic : apiSICArray) {
             transformedSICs.add(getValueFromBundle(SIC_BUNDLE_PREFIX + sic));
         }
-        return transformedSICs.toArray(apiSICArray);
+        sicCodes.setSicCodes(transformedSICs.toArray(apiSICArray));
+        return sicCodes;
     }
     
     private int transformChargeCount(Long count) {      

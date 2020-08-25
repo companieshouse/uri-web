@@ -1,15 +1,22 @@
 package uk.gov.companieshouse.uri.web.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Accounts {
 
+    @JsonProperty(value = "AccountRefDay")
     private String accountRefDay;
     
+    @JsonProperty(value = "AccountRefMonth")
     private String accountRefMonth;
     
+    @JsonProperty(value = "NextDueDate")
     private String nextDueDate;
     
+    @JsonProperty(value = "LastMadeUpDate")
     private String lastMadeUpDate;
     
+    @JsonProperty(value = "AccountCategory")
     private String accountCategory;
 
     public String getAccountRefDay() {

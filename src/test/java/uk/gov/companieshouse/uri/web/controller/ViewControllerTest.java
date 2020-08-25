@@ -1,16 +1,27 @@
 package uk.gov.companieshouse.uri.web.controller;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.thymeleaf.ITemplateEngine;
+import org.thymeleaf.context.WebContext;
 
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.uri.web.model.CompanyDetails;
@@ -23,7 +34,7 @@ class ViewControllerTest {
     
     private ViewController testViewController;
 
-    private CompanyDetails companyDetails = new CompanyDetails();
+    private CompanyDetails companyDetails;
     
     @Mock
     private CompanyService companyService;
@@ -32,20 +43,53 @@ class ViewControllerTest {
     private Logger logger;
     
     @Mock
-    private Model model;
+    private ITemplateEngine templateEngine;
+    
+    @Mock
+    private HttpServletRequest request;
+    
+    @Mock
+    private HttpServletResponse response;
+    
+    @Captor
+    ArgumentCaptor<WebContext> contextCaptor;
 
     @BeforeEach
     protected void setUp() {
-        testViewController = new ViewController(logger, companyService);
-        
+        testViewController = new ViewController(logger, companyService, templateEngine);
+        companyDetails = new CompanyDetails();
+        companyDetails.setCompanyNumber(COMPANY_NUMBER);
         when(companyService.getCompanyDetails(COMPANY_NUMBER)).thenReturn(companyDetails);
     }
 
     @Test
     void html() {
-        String viewName = testViewController.html(model, COMPANY_NUMBER);
+        mockTemplateProcess(ViewController.HTML_VIEW);
         
-        assertEquals("legacy_style_html", viewName);
-        verify(model, times(1)).addAttribute("company", companyDetails);
+        ResponseEntity<String> responseEntity = testViewController.html(COMPANY_NUMBER, request, response);
+        
+        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
+                .getVariable(ViewController.CONTEXT_VAR_NAME);
+        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
+        assertEquals(MediaType.TEXT_HTML, responseEntity.getHeaders().getContentType());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+    
+    @Test
+    void json() {
+        mockTemplateProcess(ViewController.JSON_VIEW);
+        
+        ResponseEntity<String> responseEntity = testViewController.json(COMPANY_NUMBER, request, response);
+        
+        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
+                .getVariable(ViewController.CONTEXT_VAR_NAME);
+        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
+        assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+    
+    private void mockTemplateProcess(String viewName) {
+        when(templateEngine.process(eq(viewName), contextCaptor.capture()))
+                .thenReturn(viewName);
     }
 }

@@ -27,6 +27,9 @@ public class ApiServiceImpl implements ApiService {
     @Value("${chs.api.key}")
     private String chsApiKey;
     
+    @Value("${api.url}")
+    private String apiUrl;
+    
     private Logger logger;
     
     public ApiServiceImpl(final Logger logger) {
@@ -71,6 +74,8 @@ public class ApiServiceImpl implements ApiService {
     
     public ApiClient getApiClient() {
         ApiKeyHttpClient httpClient = new ApiKeyHttpClient(chsApiKey);
-        return new ApiClient(httpClient);
+        ApiClient apiClient = new ApiClient(httpClient);
+        apiClient.setBasePath(apiUrl);
+        return apiClient;
     }
 }
