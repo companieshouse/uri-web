@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.uri.web.controller;
 
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
 
@@ -85,6 +84,19 @@ class ViewControllerTest {
                 .getVariable(ViewController.CONTEXT_VAR_NAME);
         assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
         assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+    
+    @Test
+    void rdf() {
+        mockTemplateProcess(ViewController.RDF_VIEW);
+        
+        ResponseEntity<String> responseEntity = testViewController.rdf(COMPANY_NUMBER, request, response);
+        
+        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
+                .getVariable(ViewController.CONTEXT_VAR_NAME);
+        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
+        assertEquals(ViewController.RDF_CONTENT_TYPE, responseEntity.getHeaders().getContentType().toString());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
     

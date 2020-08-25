@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:cs0="http://www.companieshouse.gov.uk/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:th="http://www.thymeleaf.org" th:object="${company}">
+  <rdf:Description th:attr="'rdf:about'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#RegAddress'}">
+    <cs0:CareofName th:if="*{registeredOfficeAddress.careOf}" th:text="*{registeredOfficeAddress.careOf}"></cs0:CareofName>
+    <cs0:PoBox th:if="*{registeredOfficeAddress.poBox}" th:text="*{registeredOfficeAddress.poBox}"></cs0:PoBox>
+    <cs0:AddressLine1 th:if="*{registeredOfficeAddress.addressLine1}" th:text="*{registeredOfficeAddress.addressLine1}"></cs0:AddressLine1>
+    <cs0:AddressLine2 th:if="*{registeredOfficeAddress.addressLine2}" th:text="*{registeredOfficeAddress.addressLine2}"></cs0:AddressLine2>
+    <cs0:PostTown th:if="*{registeredOfficeAddress.postTown}" th:text="*{registeredOfficeAddress.postTown}"></cs0:PostTown>
+    <cs0:County th:if="*{registeredOfficeAddress.region}" th:text="*{registeredOfficeAddress.region}"></cs0:County>
+    <cs0:Country th:if="*{registeredOfficeAddress.country}" th:text="*{registeredOfficeAddress.country}"></cs0:Country>
+    <cs0:Postcode th:if="*{registeredOfficeAddress.postCode}" th:text="*{registeredOfficeAddress.postCode}"></cs0:Postcode>
+  </rdf:Description>
+  <rdf:Description th:attr="'rdf:about'=*{'http://business.data.gov.uk/id/company/' + companyNumber}">
+    <cs0:SICCodes th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#SICCodes'}"/>
+    <cs0:Accounts th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Accounts'}"/>
+    <cs0:IncorporationDate th:text="*{incorporationDate}"></cs0:IncorporationDate>
+    <cs0:DissolutionDate th:if="*{dissolutionDate}" th:text="*{dissolutionDate}"></cs0:DissolutionDate>
+    <cs0:Address th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#RegAddress'}"/>
+    <cs0:Returns th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Returns'}"/>
+    <cs0:CompanyStatus th:text="*{companyStatus}"></cs0:CompanyStatus>
+    <cs0:CompanyCategory th:text="*{companyType}"></cs0:CompanyCategory>
+    <cs0:CompanyNumber th:text="*{companyNumber}"></cs0:CompanyNumber>
+    <cs0:CountryOfOrigin th:text="*{countryOfOrigin}"></cs0:CountryOfOrigin>
+    <cs0:CompanyName th:text="*{companyName}"></cs0:CompanyName>
+    <cs0:Mortgages th:if="*{mortgageTotals}" th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Mortgages'}"/>
+    <cs0:PreviousNames th:if="*{!#arrays.isEmpty(previousNames)}" th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#PreviousNames'}"/>
+  </rdf:Description>
+  <rdf:Description th:if="*{!#arrays.isEmpty(previousNames)}" th:attr="'rdf:about'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#PreviousNames'}">
+    <cs0:CompanyName th:each="previousName : *{previousNames}" th:text="${previousName.name}"></cs0:CompanyName>
+    <cs0:CONDate th:each="previousName : *{previousNames}" th:text="${previousName.ceasedOn}"></cs0:CONDate>
+  </rdf:Description>
+  <rdf:Description th:attr="'rdf:about'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Returns'}">
+    <cs0:NextDueDate th:text="*{returns.nextDueDate}"></cs0:NextDueDate>
+    <cs0:LastMadeUpDate th:text="*{returns.lastMadeUpDate}"></cs0:LastMadeUpDate>
+  </rdf:Description>
+  <rdf:Description th:if="*{mortgageTotals}" th:attr="'rdf:about'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Mortgages'}">
+    <cs0:NumMortPartSatisfied th:text="*{mortgageTotals.numMortPartSatisfied}"></cs0:NumMortPartSatisfied>
+    <cs0:NumMortOutstanding th:text="*{mortgageTotals.numMortOutstanding}"></cs0:NumMortOutstanding>
+    <cs0:NumMortCharges th:text="*{mortgageTotals.numMortCharges}"></cs0:NumMortCharges>
+    <cs0:NumMortSatisfied th:text="*{mortgageTotals.numMortSatisfied}"></cs0:NumMortSatisfied>
+  </rdf:Description>
+  <rdf:Description th:attr="'rdf:about'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#SICCodes'}">
+    <cs0:SicText th:each="sic : *{sicCodes.sicText}" th:text="${sic}"></cs0:SicText>
+  </rdf:Description>
+  <rdf:Description th:attr="'rdf:about'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Accounts'}">
+    <cs0:AccountRefDay th:text="*{accounts.accountRefDay}"></cs0:AccountRefDay>
+    <cs0:AccountRefMonth th:text="*{accounts.accountRefMonth}"></cs0:AccountRefMonth>
+    <cs0:NextDueDate th:text="*{accounts.nextDueDate}"></cs0:NextDueDate>
+    <cs0:LastMadeUpDate th:text="*{accounts.lastMadeUpDate}"></cs0:LastMadeUpDate>
+    <cs0:AccountCategory th:text="*{accounts.accountCategory}"></cs0:AccountCategory>
+  </rdf:Description>
+  <rdf:Description th:attr="'rdf:about'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber}">
+    <foaf:primaryTopic th:attr="'rdf:resource'=*{'http://business.data.gov.uk/id/company/' + companyNumber}"/>
+  </rdf:Description>
+</rdf:RDF>
