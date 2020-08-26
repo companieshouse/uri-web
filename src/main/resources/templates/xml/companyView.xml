@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Result xmlns="http://www.companieshouse.gov.uk/terms/xxx" xmlns:th="http://www.thymeleaf.org" th:object="${company}">
   <primaryTopic th:href="*{'http://business.data.gov.uk/id/company/' + companyNumber}">
     <CompanyName th:text="*{companyName}"></CompanyName>
