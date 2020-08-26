@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Result xmlns="http://www.companieshouse.gov.uk/terms/xxx" xmlns:th="http://www.thymeleaf.org" th:object="${company}">
+  <primaryTopic th:href="*{'http://business.data.gov.uk/id/company/' + companyNumber}">
+    <CompanyName th:text="*{companyName}"></CompanyName>
+    <CompanyNumber th:text="*{companyNumber}"></CompanyNumber>
+    <RegAddress th:href="*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#RegAddress'}">
+      <CareofName th:if="*{registeredOfficeAddress.careOf}" th:text="*{registeredOfficeAddress.careOf}"></CareofName>
+      <PoBox th:if="*{registeredOfficeAddress.poBox}" th:text="*{registeredOfficeAddress.poBox}"></PoBox>
+      <AddressLine1 th:if="*{registeredOfficeAddress.addressLine1}" th:text="*{registeredOfficeAddress.addressLine1}"></AddressLine1>
+      <AddressLine2 th:if="*{registeredOfficeAddress.addressLine2}" th:text="*{registeredOfficeAddress.addressLine2}"></AddressLine2>
+      <PostTown th:if="*{registeredOfficeAddress.postTown}" th:text="*{registeredOfficeAddress.postTown}"></PostTown>
+      <County th:if="*{registeredOfficeAddress.region}" th:text="*{registeredOfficeAddress.region}"></County>
+      <Country th:if="*{registeredOfficeAddress.country}" th:text="*{registeredOfficeAddress.country}"></Country>
+      <Postcode th:if="*{registeredOfficeAddress.postCode}" th:text="*{registeredOfficeAddress.postCode}"></Postcode>
+    </RegAddress>
+    <CompanyCategory  th:text="*{companyType}"></CompanyCategory>
+    <CompanyStatus th:text="*{companyStatus}"></CompanyStatus>
+    <CountryOfOrigin th:text="*{countryOfOrigin}"></CountryOfOrigin>
+    <IncorporationDate th:text="*{xmlDate(incorporationDate)}"></IncorporationDate>
+    <DissolutionDate th:if="*{dissolutionDate}" th:text="*{xmlDate(dissolutionDate)}"></DissolutionDate>
+    <PreviousNames th:each="previousName : *{previousNames}" th:href="*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#PreviousNames'}">
+      <CONDate th:text="${company.xmlDate(previousName.ceasedOn)}"></CONDate>
+      <CompanyName th:text="${previousName.name}"></CompanyName>
+    </PreviousNames>
+    <Accounts th:href="*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Accounts'}">
+      <AccountRefDay th:text="*{accounts.accountRefDay}"></AccountRefDay>
+      <AccountRefMonth th:text="*{accounts.accountRefMonth}"></AccountRefMonth>
+      <NextDueDate th:text="*{xmlDate(accounts.nextDueDate)}"></NextDueDate>
+      <LastMadeUpDate th:text="*{xmlDate(accounts.lastMadeUpDate)}"></LastMadeUpDate>
+      <AccountCategory th:text="*{accounts.accountCategory}"></AccountCategory>
+    </Accounts>
+    <Returns th:href="*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Returns'}">
+      <NextDueDate th:text="*{xmlDate(returns.nextDueDate)}"></NextDueDate>
+      <LastMadeUpDate th:text="*{xmlDate(returns.lastMadeUpDate)}"></LastMadeUpDate>
+    </Returns>
+    <Mortgages th:if="*{mortgageTotals}" th:href="*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Mortgages'}">
+      <NumMortCharges th:text="*{mortgageTotals.numMortCharges}"></NumMortCharges>
+      <NumMortOutstanding th:text="*{mortgageTotals.numMortOutstanding}"></NumMortOutstanding>
+      <NumMortPartSatisfied th:text="*{mortgageTotals.numMortPartSatisfied}"></NumMortPartSatisfied>
+      <NumMortSatisfied th:text="*{mortgageTotals.numMortSatisfied}"></NumMortSatisfied>
+    </Mortgages>
+    <SICCodes th:href="*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#SICCodes'}">
+      <SicText th:each="sic : *{sicCodes.sicText}" th:text="${sic}"></SicText>
+    </SICCodes>
+  </primaryTopic>
+</Result>
