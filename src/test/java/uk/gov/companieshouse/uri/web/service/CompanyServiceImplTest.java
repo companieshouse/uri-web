@@ -4,6 +4,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -44,9 +45,7 @@ class CompanyServiceImplTest {
 
     @Test
     void getCompanyDetailsWithoutCharges() {
-        CompanyProfileApi companyProfileApi = new CompanyProfileApi();
-        when(apiService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
-        when(companyDetailsTransformer.profileApiToDetails(companyProfileApi)).thenReturn(new CompanyDetails());
+        CompanyProfileApi companyProfileApi = mockCompanyProfileApiCallAndTransform(false);
         
         testCompanyService.getCompanyDetails(COMPANY_NUMBER);
         
@@ -72,12 +71,7 @@ class CompanyServiceImplTest {
     
     @Test
     void getCompanyDetailsWithCharges() {
-        CompanyProfileApi companyProfileApi = new CompanyProfileApi();
-        companyProfileApi.setHasCharges(true);
-        when(apiService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
-        CompanyDetails companyDetails = new CompanyDetails();
-        companyDetails.setHasCharges(true);
-        when(companyDetailsTransformer.profileApiToDetails(companyProfileApi)).thenReturn(companyDetails);
+        CompanyProfileApi companyProfileApi = mockCompanyProfileApiCallAndTransform(true);
         
         ChargesApi chargesApi = new ChargesApi();
         when(apiService.getCharges(COMPANY_NUMBER)).thenReturn(chargesApi);
@@ -92,12 +86,23 @@ class CompanyServiceImplTest {
     }
     
     @Test
+    void getCompanyDetailsWithNullCharges() {
+        CompanyProfileApi companyProfileApi = mockCompanyProfileApiCallAndTransform(true);
+        
+        when(apiService.getCharges(COMPANY_NUMBER)).thenReturn(null);
+        
+        CompanyDetails companyDetails = testCompanyService.getCompanyDetails(COMPANY_NUMBER);
+        
+        assertNull(companyDetails.getMortgageTotals());
+        verify(apiService, times(1)).getCompanyProfile(COMPANY_NUMBER);
+        verify(companyDetailsTransformer, times(1)).profileApiToDetails(companyProfileApi);
+        verify(apiService, times(1)).getCharges(COMPANY_NUMBER);
+        verify(companyDetailsTransformer, times(0)).chargesApiToMortgageTotals(null);
+    }
+    
+    @Test
     void getCompanyDetailsWithChargesAndServiceException() throws Exception {
-        CompanyProfileApi companyProfileApi = new CompanyProfileApi();
-        when(apiService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
-        CompanyDetails companyDetails = new CompanyDetails();
-        companyDetails.setHasCharges(true);
-        when(companyDetailsTransformer.profileApiToDetails(companyProfileApi)).thenReturn(companyDetails);
+        CompanyProfileApi companyProfileApi = mockCompanyProfileApiCallAndTransform(true);
 
         ChargesApi chargesApi = new ChargesApi();
         when(apiService.getCharges(COMPANY_NUMBER)).thenReturn(chargesApi);
@@ -112,5 +117,14 @@ class CompanyServiceImplTest {
         verify(companyDetailsTransformer, times(1)).profileApiToDetails(companyProfileApi);
         verify(apiService, times(1)).getCharges(COMPANY_NUMBER);
         verify(companyDetailsTransformer, times(1)).chargesApiToMortgageTotals(chargesApi);
+    }
+    
+    private CompanyProfileApi mockCompanyProfileApiCallAndTransform(boolean withCharges) {
+        CompanyProfileApi companyProfileApi = new CompanyProfileApi();
+        when(apiService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
+        CompanyDetails companyDetails = new CompanyDetails();
+        companyDetails.setHasCharges(withCharges);
+        when(companyDetailsTransformer.profileApiToDetails(companyProfileApi)).thenReturn(companyDetails);
+        return companyProfileApi;
     }
 }
