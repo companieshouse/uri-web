@@ -26,4 +26,12 @@ class CompanyDetailsTest {
         assertEquals("", testCompanyDetails.xmlDate(""));
         assertEquals(null, testCompanyDetails.xmlDate(null));
     }
+    
+    @Test
+    void csvEscape() {
+        assertEquals("\"\"COMPANY\"\"", testCompanyDetails.csvEscape("\"COMPANY\""));
+        assertEquals("\"\"\"\"COMPANY\"\"\"\"", testCompanyDetails.csvEscape("\"\"COMPANY\"\""));
+        assertEquals("", testCompanyDetails.csvEscape(""));
+        assertEquals(null, testCompanyDetails.csvEscape(null));
+    }
 }

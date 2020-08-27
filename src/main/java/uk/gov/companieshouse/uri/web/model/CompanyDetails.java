@@ -184,6 +184,15 @@ public class CompanyDetails {
         }
         return displayDateString;
     }
+    
+    /**
+     * Escapes a string so that it is suitable for csv output
+     * This is used to handle fields that may contain one or more " characters
+     * @param unescapedString - string that may have " present
+     */    
+    public String csvEscape(String unescapedString) {
+        return unescapedString == null ? null : unescapedString.replaceAll("\"", "\"\"");
+    }
 
     @Override
     public String toString() {
