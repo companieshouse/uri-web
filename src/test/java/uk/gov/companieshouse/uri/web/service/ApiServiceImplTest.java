@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import com.google.api.client.http.HttpHeaders;
+import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.HttpStatusCodes;
+import com.google.api.client.http.HttpResponseException.Builder;
 
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -142,6 +148,20 @@ class ApiServiceImplTest {
         });
 
         assertEquals("Error retrieving charges", exception.getMessage());
+        verify(mockApiClient, times(1)).charges();
+        verify(chargesResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX);
+        verify(chargesGet, times(1)).execute();
+    }
+    
+    @Test
+    void getChargesApiErrorResponseException404() throws ApiErrorResponseException, URIValidationException {
+        mockChargesApiCall();
+        final Builder builder = new HttpResponseException.Builder(HttpStatusCodes.STATUS_CODE_NOT_FOUND, "", new HttpHeaders());
+        ApiErrorResponseException apiErrorResponseException = new ApiErrorResponseException(builder);
+        when(chargesGet.execute()).thenThrow(apiErrorResponseException);
+        
+        assertNull(testApiService.getCharges(COMPANY_NUMBER));
+
         verify(mockApiClient, times(1)).charges();
         verify(chargesResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER + GET_CHARGES_URI_SUFFIX);
         verify(chargesGet, times(1)).execute();

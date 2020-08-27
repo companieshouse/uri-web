@@ -45,12 +45,14 @@ public class CompanyServiceImpl implements CompanyService {
         
         if (companyDetails.hasCharges()) {
             ChargesApi chargesApi = apiService.getCharges(companyNumber);
-            try {
-                companyDetails.setMortgageTotals(companyDetailsTransformer.chargesApiToMortgageTotals(chargesApi));
-            }
-            catch (RuntimeException e) {
-                logger.error("Exception during transform of chargesApi", e);
-                throw new ServiceException("Error transforming charges", e);
+            if (chargesApi != null) {
+                try {
+                    companyDetails.setMortgageTotals(companyDetailsTransformer.chargesApiToMortgageTotals(chargesApi));
+                }
+                catch (RuntimeException e) {
+                    logger.error("Exception during transform of chargesApi", e);
+                    throw new ServiceException("Error transforming charges", e);
+                }
             }
         }
         return companyDetails;

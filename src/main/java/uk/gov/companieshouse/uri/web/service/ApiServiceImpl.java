@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 
+import com.google.api.client.http.HttpStatusCodes;
+
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -64,6 +66,11 @@ public class ApiServiceImpl implements ApiService {
             return response.getData();
             
         } catch (ApiErrorResponseException e) {
+            if (e.getStatusCode() == HttpStatusCodes.STATUS_CODE_NOT_FOUND) {
+                // Don't throw a ServiceException if just 404 as we should
+                // still return the company profile data without the mortgages.
+                return null;
+            }
             logger.debug(FAILED_CHARGES_PREFIX + uri + FAILED_SUFFIX + e);
             throw new ServiceException("Error retrieving charges", e);
         } catch (URIValidationException e) {
