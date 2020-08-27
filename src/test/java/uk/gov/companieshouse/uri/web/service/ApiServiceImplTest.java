@@ -156,7 +156,7 @@ class ApiServiceImplTest {
     @Test
     void getChargesApiErrorResponseException404() throws ApiErrorResponseException, URIValidationException {
         mockChargesApiCall();
-        Builder builder = new HttpResponseException.Builder(HttpStatusCodes.STATUS_CODE_NOT_FOUND, "", new HttpHeaders());
+        final Builder builder = new HttpResponseException.Builder(HttpStatusCodes.STATUS_CODE_NOT_FOUND, "", new HttpHeaders());
         ApiErrorResponseException apiErrorResponseException = new ApiErrorResponseException(builder);
         when(chargesGet.execute()).thenThrow(apiErrorResponseException);
         
