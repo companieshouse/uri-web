@@ -1,0 +1,41 @@
+[# th:object="${company}"]---
+primaryTopic:
+  Accounts:
+    AccountCategory: [(*{accounts.accountCategory})]
+    AccountRefDay: [(*{accounts.accountRefDay})]
+    AccountRefMonth: [(*{accounts.accountRefMonth})]
+    LastMadeUpDate: [(*{accounts.lastMadeUpDate})]
+    NextDueDate: [(*{accounts.nextDueDate})]
+  CompanyCategory: [(*{companyType})]
+  CompanyName: [(*{companyName})]
+  CompanyNumber: [(*{companyNumber})]
+  CompanyStatus: [(*{companyStatus})]
+  CountryOfOrigin: [(*{countryOfOrigin})]
+  IncorporationDate: [(*{incorporationDate})]
+[# th:if="*{dissolutionDate}"]  DissolutionDate: [(*{dissolutionDate})][/]
+[# th:if="*{!#arrays.isEmpty(previousNames)}"]  PreviousNames:
+[# th:each="previousName : *{previousNames}"]    - CONDate: [(${previousName.ceasedOn})]
+      CompanyName: [(${previousName.name})]
+[/][/]
+[# th:if="*{mortgageTotals}"]
+  Mortgages:
+    NumMortCharges: [(*{mortgageTotals.numMortCharges})]
+    NumMortOutstanding: [(*{mortgageTotals.numMortOutstanding})]
+    NumMortPartSatisfied: [(*{mortgageTotals.numMortPartSatisfied})]
+    NumMortSatisfied: [(*{mortgageTotals.numMortSatisfied})][/]
+[# th:object="${company.registeredOfficeAddress}"]  RegAddress:
+[# th:if="*{careOf}"]    CareofName: [(*{careOf})][/]
+[# th:if="*{poBox}"]    PoBox: [(*{poBox})][/]
+[# th:if="*{addressLine1}"]    AddressLine1: [(*{addressLine1})][/]
+[# th:if="*{addressLine2}"]    AddressLine1: [(*{addressLine2})][/]
+[# th:if="*{postTown}"]    PostTown: [(*{postTown})][/]
+[# th:if="*{region}"]    County: [(*{region})][/]
+[# th:if="*{country}"]    Country: [(*{country})][/]
+[# th:if="*{postCode}"]    Postcode: [(*{postCode})][/][/]
+  Returns:
+    LastMadeUpDate: [(*{returns.lastMadeUpDate})]
+    NextDueDate: [(*{returns.nextDueDate})]
+  SICCodes:
+    SicText:
+[# th:each="sic : *{sicCodes.sicText}"]      - '[(${sic})]'
+[/][/]

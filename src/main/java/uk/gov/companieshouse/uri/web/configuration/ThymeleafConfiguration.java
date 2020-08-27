@@ -20,6 +20,7 @@ public class ThymeleafConfiguration {
     public static final String RDF_TEMPLATES_RESOLVE_PATTERN = "rdf/*";
     public static final String XML_TEMPLATES_RESOLVE_PATTERN = "xml/*";
     public static final String CSV_TEMPLATES_RESOLVE_PATTERN = "csv/*";
+    public static final String YAML_TEMPLATES_RESOLVE_PATTERN = "yaml/*";
    
     public static final String UTF8 = "UTF-8";
     
@@ -80,6 +81,21 @@ public class ThymeleafConfiguration {
         theResourceTemplateResolver.setTemplateMode(TemplateMode.TEXT);
         theResourceTemplateResolver.setCacheable(false);
         theResourceTemplateResolver.setOrder(4);
+        return theResourceTemplateResolver;
+    }
+    
+    @Bean
+    public SpringResourceTemplateResolver yamlMessageTemplateResolver() {
+        SpringResourceTemplateResolver theResourceTemplateResolver =
+            new SpringResourceTemplateResolver();
+        theResourceTemplateResolver.setPrefix(TEMPLATES_BASE);
+        theResourceTemplateResolver.setResolvablePatterns(
+            Collections.singleton(YAML_TEMPLATES_RESOLVE_PATTERN));
+        theResourceTemplateResolver.setSuffix(".yaml");
+        theResourceTemplateResolver.setCharacterEncoding(UTF8);
+        theResourceTemplateResolver.setTemplateMode(TEXT_TEMPLATE_MODE);
+        theResourceTemplateResolver.setCacheable(false);
+        theResourceTemplateResolver.setOrder(5);
         return theResourceTemplateResolver;
     }
     
