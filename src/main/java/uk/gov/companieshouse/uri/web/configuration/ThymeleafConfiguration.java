@@ -16,9 +16,10 @@ public class ThymeleafConfiguration {
     public static final String TEMPLATES_BASE = "classpath:/templates/";
 
     public static final String JSON_TEMPLATES_RESOLVE_PATTERN = "json/*";
+    public static final String RDF_TEMPLATES_RESOLVE_PATTERN = "rdf/*";
    
     public static final String UTF8 = "UTF-8";
-
+    
     @Bean
     public SpringResourceTemplateResolver jsonMessageTemplateResolver() {
         SpringResourceTemplateResolver theResourceTemplateResolver =
@@ -30,10 +31,25 @@ public class ThymeleafConfiguration {
         theResourceTemplateResolver.setCharacterEncoding(UTF8);
         theResourceTemplateResolver.setTemplateMode("JAVASCRIPT");
         theResourceTemplateResolver.setCacheable(false);
-        theResourceTemplateResolver.setOrder(3);
+        theResourceTemplateResolver.setOrder(1);
         return theResourceTemplateResolver;
     }
- 
+
+    @Bean
+    public SpringResourceTemplateResolver rdfMessageTemplateResolver() {
+        SpringResourceTemplateResolver theResourceTemplateResolver =
+            new SpringResourceTemplateResolver();
+        theResourceTemplateResolver.setPrefix(TEMPLATES_BASE);
+        theResourceTemplateResolver.setResolvablePatterns(
+            Collections.singleton(RDF_TEMPLATES_RESOLVE_PATTERN));
+        theResourceTemplateResolver.setSuffix(".rdf");
+        theResourceTemplateResolver.setCharacterEncoding(UTF8);
+        theResourceTemplateResolver.setTemplateMode("XML");
+        theResourceTemplateResolver.setCacheable(false);
+        theResourceTemplateResolver.setOrder(2);
+        return theResourceTemplateResolver;
+    }
+    
     @Bean
     public SpringTemplateEngine messageTemplateEngine(
         final Collection<SpringResourceTemplateResolver> inTemplateResolvers) {

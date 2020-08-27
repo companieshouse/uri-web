@@ -24,7 +24,10 @@ public class ViewController {
     
     protected static final String HTML_VIEW = "html/companyView";
     protected static final String JSON_VIEW = "json/companyView";
+    protected static final String RDF_VIEW = "rdf/companyView";
     protected static final String CONTEXT_VAR_NAME = "company";
+    
+    protected static final String RDF_CONTENT_TYPE = "application/rdf+xml";
     
     private Logger logger;
     
@@ -60,6 +63,16 @@ public class ViewController {
 
         return new ResponseEntity<>(renderView(companyNumber, JSON_VIEW, request, response),
                 contentTypeHeader(MediaType.APPLICATION_JSON_VALUE),
+                HttpStatus.OK);
+    }
+    
+    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.rdf"}, 
+            produces = RDF_CONTENT_TYPE)
+    public ResponseEntity<String> rdf(@PathVariable String companyNumber, HttpServletRequest request, 
+            HttpServletResponse response) {
+
+        return new ResponseEntity<>(renderView(companyNumber, RDF_VIEW, request, response),
+                contentTypeHeader(RDF_CONTENT_TYPE),
                 HttpStatus.OK);
     }
     
