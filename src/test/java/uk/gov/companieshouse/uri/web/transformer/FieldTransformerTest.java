@@ -22,6 +22,7 @@ public class FieldTransformerTest {
         assertEquals("2020-08-26", transformer.xmlDate("26/08/2020"));
         assertEquals("2020", transformer.xmlDate("2020"));
         assertEquals("26/08/20", transformer.xmlDate("26/08/20"));
+        assertEquals("32/08/2020", transformer.xmlDate("32/08/2020"));
         assertEquals("Not a date", transformer.xmlDate("Not a date"));
         assertEquals("", transformer.xmlDate(""));
         assertEquals(null, transformer.xmlDate(null));

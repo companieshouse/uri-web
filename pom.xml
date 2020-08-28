@@ -22,6 +22,7 @@
         <structured-logging.version>1.9.0</structured-logging.version>
         <thymeleaf-layout-dialect.version>2.3.0</thymeleaf-layout-dialect.version>        
         <mock-server.version>5.5.4</mock-server.version>
+        <commons-validator.version>1.7</commons-validator.version>
 
         <!-- Spring -->
         <spring-boot-dependencies.version>2.2.0.RELEASE</spring-boot-dependencies.version>
@@ -99,7 +100,12 @@
 		    <artifactId>sonar-maven-plugin</artifactId>
 		    <version>${sonar-maven-plugin.version}</version>
 		</dependency>
-
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>${commons-validator.version}</version>
+        </dependency>
+		
         <!-- SDKs -->
         <dependency>
             <groupId>uk.gov.companieshouse</groupId>

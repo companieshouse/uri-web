@@ -1,16 +1,18 @@
 package uk.gov.companieshouse.uri.web.transformer;
 
+import org.apache.commons.validator.GenericValidator;
+
 public class FieldTransformer {
     
     /**
-     * Converts a string date of format 'DD/MM/YYYY' to 'YYYY-MM-DD'
+     * Converts a string date of format 'dd/MM/yyyy' to 'yyyy-MM-dd'
      * for use in XML template output
      * If the supplied date is null or is not the correct format, then
      * the supplied string is returned unaltered
-     * @param displayDateString - date string of the format 'DD/MM/YYYY'
+     * @param displayDateString - date string of the format 'dd/MM/yyyy'
      */    
     public String xmlDate(String displayDateString) {
-        if (displayDateString != null && displayDateString.matches("^[0-9]{2}/[0-9]{2}/[0-9]{4}$")) {
+        if (GenericValidator.isDate(displayDateString, "dd/MM/yyyy", true)) {
             final StringBuilder builder = new StringBuilder();
             builder.append(displayDateString.substring(6));
             builder.append('-');
