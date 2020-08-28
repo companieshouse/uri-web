@@ -91,7 +91,7 @@ public class ThymeleafConfiguration {
         theResourceTemplateResolver.setPrefix(TEMPLATES_BASE);
         theResourceTemplateResolver.setResolvablePatterns(
             Collections.singleton(YAML_TEMPLATES_RESOLVE_PATTERN));
-        theResourceTemplateResolver.setSuffix(".yaml");
+        theResourceTemplateResolver.setSuffix(".yamlx");
         theResourceTemplateResolver.setCharacterEncoding(UTF8);
         theResourceTemplateResolver.setTemplateMode(TemplateMode.TEXT);
         theResourceTemplateResolver.setCacheable(false);
