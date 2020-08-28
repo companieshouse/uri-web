@@ -1,8 +1,13 @@
 package uk.gov.companieshouse.uri.web.transformer;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.GenericValidator;
 
 public class FieldTransformer {
+    
+    protected static final String[] INVALID_YAML_START_CHARS = {"!", "&", "*", "-",
+            "?", "{", "}", "[", "]", ",", "|", ">", "@", "`", "\"", "'"};
+    protected static final String INVALID_YAML_CHARS = ":#";
     
     /**
      * Converts a string date of format 'dd/MM/yyyy' to 'yyyy-MM-dd'
@@ -31,5 +36,19 @@ public class FieldTransformer {
      */    
     public String csvEscape(String unescapedString) {
         return unescapedString == null ? null : unescapedString.replaceAll("\"", "\"\"");
+    }
+    
+    /**
+     * Escapes a string so that it is suitable for yaml output
+     * This is used to handle fields that may start with a 'special' character
+     * or contain : or #
+     * @param unescapedString - string that may contain special characters
+     */    
+    public String yamlEscape(String unescapedString) {
+        if (StringUtils.startsWithAny(unescapedString, INVALID_YAML_START_CHARS) ||
+                StringUtils.containsAny(unescapedString, INVALID_YAML_CHARS)) {
+            return "'" + unescapedString.replaceAll("'", "''") + "'";
+        }
+        return unescapedString;
     }
 }
