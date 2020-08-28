@@ -30,6 +30,7 @@ public class ViewController {
     protected static final String YAML_VIEW = "yaml/companyView";
     
     protected static final String CONTEXT_VAR_NAME = "company";
+    protected static final String LINES_WITH_JUST_WHITESPACE_REG_EXP = "(?m)^\\s*\n";
     
     protected static final String RDF_CONTENT_TYPE = "application/rdf+xml";
     protected static final String CSV_CONTENT_TYPE = "text/csv";
@@ -119,7 +120,8 @@ public class ViewController {
         WebContext context = new WebContext(request, response, request.getServletContext());
         context.setVariable(CONTEXT_VAR_NAME, companyDetails);
         
-        return templateEngine.process(viewName, context);
+        String rendered = templateEngine.process(viewName, context);
+        return rendered.replaceAll(LINES_WITH_JUST_WHITESPACE_REG_EXP, "");
     }
     
     private HttpHeaders contentTypeHeader(String contentTypeValue) {
