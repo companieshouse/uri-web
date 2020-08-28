@@ -2,19 +2,19 @@
 primaryTopic:
   Accounts:
     AccountCategory: [(*{accounts.accountCategory})]
-    AccountRefDay: [(*{accounts.accountRefDay})]
-    AccountRefMonth: [(*{accounts.accountRefMonth})]
-    LastMadeUpDate: [(*{accounts.lastMadeUpDate})]
-    NextDueDate: [(*{accounts.nextDueDate})]
+    AccountRefDay: [(*{accounts.accountRefDay}?:'~')]
+    AccountRefMonth: [(*{accounts.accountRefMonth}?:'~')]
+    LastMadeUpDate: [(*{accounts.lastMadeUpDate}?:'~')]
+    NextDueDate: [(*{accounts.nextDueDate}?:'~')]
   CompanyCategory: [(*{companyType})]
   CompanyName: [(*{yamlEscape(companyName)})]
   CompanyNumber: [(*{companyNumber})]
   CompanyStatus: [(*{companyStatus})]
   CountryOfOrigin: [(*{countryOfOrigin})]
-  IncorporationDate: [(*{incorporationDate})]
+  IncorporationDate: [(*{incorporationDate}?:'~')]
 [# th:if="*{dissolutionDate}"]  DissolutionDate: [(*{dissolutionDate})][/]
 [# th:if="*{!#arrays.isEmpty(previousNames)}"]  PreviousNames:
-[# th:each="previousName : *{previousNames}"]    - CONDate: [(${previousName.ceasedOn})]
+[# th:each="previousName : *{previousNames}"]    - CONDate: [(${previousName.ceasedOn}?:'~')]
       CompanyName: [(${company.yamlEscape(previousName.name)})]
 [/][/]
 [# th:if="*{mortgageTotals}"]
@@ -33,8 +33,8 @@ primaryTopic:
 [# th:if="*{registeredOfficeAddress.country}"]    Country: [(*{yamlEscape(registeredOfficeAddress.country)})][/]
 [# th:if="*{registeredOfficeAddress.postCode}"]    Postcode: [(*{yamlEscape(registeredOfficeAddress.postCode)})][/]
   Returns:
-    LastMadeUpDate: [(*{returns.lastMadeUpDate})]
-    NextDueDate: [(*{returns.nextDueDate})]
+    LastMadeUpDate: [(*{returns.lastMadeUpDate}?:'~')]
+    NextDueDate: [(*{returns.nextDueDate}?:'~')]
   SICCodes:
     SicText:
 [# th:each="sic : *{sicCodes.sicText}"]      - '[(${sic})]'
