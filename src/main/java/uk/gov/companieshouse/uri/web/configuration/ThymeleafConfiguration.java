@@ -17,8 +17,10 @@ public class ThymeleafConfiguration {
 
     public static final String JSON_TEMPLATES_RESOLVE_PATTERN = "json/*";
     public static final String RDF_TEMPLATES_RESOLVE_PATTERN = "rdf/*";
+    public static final String XML_TEMPLATES_RESOLVE_PATTERN = "xml/*";
    
     public static final String UTF8 = "UTF-8";
+    public static final String XML_TEMPLATE_MODE = "XML";
     
     @Bean
     public SpringResourceTemplateResolver jsonMessageTemplateResolver() {
@@ -44,9 +46,24 @@ public class ThymeleafConfiguration {
             Collections.singleton(RDF_TEMPLATES_RESOLVE_PATTERN));
         theResourceTemplateResolver.setSuffix(".rdf");
         theResourceTemplateResolver.setCharacterEncoding(UTF8);
-        theResourceTemplateResolver.setTemplateMode("XML");
+        theResourceTemplateResolver.setTemplateMode(XML_TEMPLATE_MODE);
         theResourceTemplateResolver.setCacheable(false);
         theResourceTemplateResolver.setOrder(2);
+        return theResourceTemplateResolver;
+    }
+    
+    @Bean
+    public SpringResourceTemplateResolver xmlMessageTemplateResolver() {
+        SpringResourceTemplateResolver theResourceTemplateResolver =
+            new SpringResourceTemplateResolver();
+        theResourceTemplateResolver.setPrefix(TEMPLATES_BASE);
+        theResourceTemplateResolver.setResolvablePatterns(
+            Collections.singleton(XML_TEMPLATES_RESOLVE_PATTERN));
+        theResourceTemplateResolver.setSuffix(".xml");
+        theResourceTemplateResolver.setCharacterEncoding(UTF8);
+        theResourceTemplateResolver.setTemplateMode(XML_TEMPLATE_MODE);
+        theResourceTemplateResolver.setCacheable(false);
+        theResourceTemplateResolver.setOrder(3);
         return theResourceTemplateResolver;
     }
     

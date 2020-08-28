@@ -164,6 +164,26 @@ public class CompanyDetails {
     public void setMortgageTotals(MortgageTotals mortgageTotals) {
         this.mortgageTotals = mortgageTotals;
     }
+    
+    /**
+     * Converts a string date of format 'DD/MM/YYYY' to 'YYYY-MM-DD'
+     * for use in XML template output
+     * If the supplied date is null or is not the correct format, then
+     * the supplied string is returned unaltered
+     * @param displayDateString - date string of the format 'DD/MM/YYYY'
+     */    
+    public String xmlDate(String displayDateString) {
+        if (displayDateString != null && displayDateString.matches("^[0-9]{2}/[0-9]{2}/[0-9]{4}$")) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(displayDateString.substring(6));
+            builder.append('-');
+            builder.append(displayDateString.substring(3, 5));
+            builder.append('-');
+            builder.append(displayDateString.substring(0, 2));
+            return builder.toString();
+        }
+        return displayDateString;
+    }
 
     @Override
     public String toString() {

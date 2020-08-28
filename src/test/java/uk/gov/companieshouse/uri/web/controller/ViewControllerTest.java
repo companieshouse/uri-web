@@ -100,6 +100,19 @@ class ViewControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
     
+    @Test
+    void xml() {
+        mockTemplateProcess(ViewController.XML_VIEW);
+        
+        ResponseEntity<String> responseEntity = testViewController.xml(COMPANY_NUMBER, request, response);
+        
+        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
+                .getVariable(ViewController.CONTEXT_VAR_NAME);
+        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
+        assertEquals(MediaType.APPLICATION_XML, responseEntity.getHeaders().getContentType());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+    
     private void mockTemplateProcess(String viewName) {
         when(templateEngine.process(eq(viewName), contextCaptor.capture()))
                 .thenReturn(viewName);
