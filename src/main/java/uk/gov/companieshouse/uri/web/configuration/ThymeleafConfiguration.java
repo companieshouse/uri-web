@@ -93,7 +93,7 @@ public class ThymeleafConfiguration {
             Collections.singleton(YAML_TEMPLATES_RESOLVE_PATTERN));
         theResourceTemplateResolver.setSuffix(".yaml");
         theResourceTemplateResolver.setCharacterEncoding(UTF8);
-        theResourceTemplateResolver.setTemplateMode(TEXT_TEMPLATE_MODE);
+        theResourceTemplateResolver.setTemplateMode(TemplateMode.TEXT);
         theResourceTemplateResolver.setCacheable(false);
         theResourceTemplateResolver.setOrder(5);
         return theResourceTemplateResolver;
