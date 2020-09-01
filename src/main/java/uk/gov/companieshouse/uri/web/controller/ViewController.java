@@ -27,10 +27,14 @@ public class ViewController {
     protected static final String RDF_VIEW = "rdf/companyView";
     protected static final String XML_VIEW = "xml/companyView";
     protected static final String CSV_VIEW = "csv/companyView";
+    protected static final String YAML_VIEW = "yaml/companyView";
+    
     protected static final String CONTEXT_VAR_NAME = "company";
+    protected static final String LINES_WITH_JUST_WHITESPACE_REG_EXP = "(?m)^\\s*\n";
     
     protected static final String RDF_CONTENT_TYPE = "application/rdf+xml";
     protected static final String CSV_CONTENT_TYPE = "text/csv";
+    protected static final String YAML_CONTENT_TYPE = "application/yaml";
     
     private Logger logger;
     
@@ -99,6 +103,16 @@ public class ViewController {
                 HttpStatus.OK);
     }
     
+    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.yaml"}, 
+            produces = YAML_CONTENT_TYPE)
+    public ResponseEntity<String> yaml(@PathVariable String companyNumber, HttpServletRequest request, 
+            HttpServletResponse response) {
+
+        return new ResponseEntity<>(renderView(companyNumber, YAML_VIEW, request, response),
+                contentTypeHeader(YAML_CONTENT_TYPE),
+                HttpStatus.OK);
+    }
+    
     private String renderView(String companyNumber, String viewName, HttpServletRequest request, HttpServletResponse response) {
         CompanyDetails companyDetails = companyService.getCompanyDetails(companyNumber);
         logger.debug(companyDetails.toString());
@@ -106,7 +120,8 @@ public class ViewController {
         WebContext context = new WebContext(request, response, request.getServletContext());
         context.setVariable(CONTEXT_VAR_NAME, companyDetails);
         
-        return templateEngine.process(viewName, context);
+        String rendered = templateEngine.process(viewName, context);
+        return rendered.replaceAll(LINES_WITH_JUST_WHITESPACE_REG_EXP, "");
     }
     
     private HttpHeaders contentTypeHeader(String contentTypeValue) {

@@ -1,0 +1,41 @@
+[# th:object="${company}"]---
+primaryTopic:
+  Accounts:
+    AccountCategory: [(*{accounts.accountCategory})]
+    AccountRefDay: [(*{accounts.accountRefDay}?:'~')]
+    AccountRefMonth: [(*{accounts.accountRefMonth}?:'~')]
+    LastMadeUpDate: [(*{accounts.lastMadeUpDate}?:'~')]
+    NextDueDate: [(*{accounts.nextDueDate}?:'~')]
+  CompanyCategory: [(*{companyType})]
+  CompanyName: [(*{yamlEscape(companyName)})]
+  CompanyNumber: [(*{companyNumber})]
+  CompanyStatus: [(*{companyStatus})]
+  CountryOfOrigin: [(*{countryOfOrigin})]
+  IncorporationDate: [(*{incorporationDate}?:'~')]
+[# th:if="*{dissolutionDate}"]  DissolutionDate: [(*{dissolutionDate})][/]
+[# th:if="*{!#arrays.isEmpty(previousNames)}"]  PreviousNames:
+[# th:each="previousName : *{previousNames}"]    - CONDate: [(${previousName.ceasedOn}?:'~')]
+      CompanyName: [(${company.yamlEscape(previousName.name)})]
+[/][/]
+[# th:if="*{mortgageTotals}"]
+  Mortgages:
+    NumMortCharges: [(*{mortgageTotals.numMortCharges})]
+    NumMortOutstanding: [(*{mortgageTotals.numMortOutstanding})]
+    NumMortPartSatisfied: [(*{mortgageTotals.numMortPartSatisfied})]
+    NumMortSatisfied: [(*{mortgageTotals.numMortSatisfied})][/]
+  RegAddress:
+[# th:if="*{registeredOfficeAddress.careOf}"]    CareofName: [(*{yamlEscape(registeredOfficeAddress.careOf)})][/]
+[# th:if="*{registeredOfficeAddress.poBox}"]    PoBox: [(*{yamlEscape(registeredOfficeAddress.poBox)})][/]
+[# th:if="*{registeredOfficeAddress.addressLine1}"]    AddressLine1: [(*{yamlEscape(registeredOfficeAddress.addressLine1)})][/]
+[# th:if="*{registeredOfficeAddress.addressLine2}"]    AddressLine2: [(*{yamlEscape(registeredOfficeAddress.addressLine2)})][/]
+[# th:if="*{registeredOfficeAddress.postTown}"]    PostTown: [(*{yamlEscape(registeredOfficeAddress.postTown)})][/]
+[# th:if="*{registeredOfficeAddress.region}"]    County: [(*{yamlEscape(registeredOfficeAddress.region)})][/]
+[# th:if="*{registeredOfficeAddress.country}"]    Country: [(*{yamlEscape(registeredOfficeAddress.country)})][/]
+[# th:if="*{registeredOfficeAddress.postCode}"]    Postcode: [(*{yamlEscape(registeredOfficeAddress.postCode)})][/]
+  Returns:
+    LastMadeUpDate: [(*{returns.lastMadeUpDate}?:'~')]
+    NextDueDate: [(*{returns.nextDueDate}?:'~')]
+  SICCodes:
+    SicText:
+[# th:each="sic : *{sicCodes.sicText}"]      - '[(${sic})]'
+[/][/]

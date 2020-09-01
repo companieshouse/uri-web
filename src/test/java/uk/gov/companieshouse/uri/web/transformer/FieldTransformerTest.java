@@ -35,4 +35,24 @@ public class FieldTransformerTest {
         assertEquals("", transformer.csvEscape(""));
         assertEquals(null, transformer.csvEscape(null));
     }
+    
+    @Test
+    void yamlEscape() {
+        assertEquals("'\"TEST\" COMPANY'", transformer.yamlEscape("\"TEST\" COMPANY"));
+        assertEquals("'\"TEST\" ''COMPANY'''", transformer.yamlEscape("\"TEST\" 'COMPANY'"));
+        for (String invalidAtStart : FieldTransformer.INVALID_YAML_START_CHARS) {
+            if (invalidAtStart.equals("'")) {
+                assertEquals("''" + invalidAtStart + " TEST'", transformer.yamlEscape(invalidAtStart + " TEST"));
+            } else {
+                assertEquals("'" + invalidAtStart + " TEST'", transformer.yamlEscape(invalidAtStart + " TEST"));
+            }
+        }
+        for (String validAfterStart : FieldTransformer.INVALID_YAML_START_CHARS) {
+            assertEquals("TEST " + validAfterStart, transformer.yamlEscape("TEST " + validAfterStart));
+        }
+        assertEquals("'TEST : TEST'", transformer.yamlEscape("TEST : TEST"));
+        assertEquals("'TEST # TEST'", transformer.yamlEscape("TEST # TEST"));
+        assertEquals("", transformer.yamlEscape(""));
+        assertEquals(null, transformer.yamlEscape(null));
+    }
 }

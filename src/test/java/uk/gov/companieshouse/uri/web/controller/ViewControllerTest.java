@@ -126,6 +126,19 @@ class ViewControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
     
+    @Test
+    void yaml() {
+        mockTemplateProcess(ViewController.YAML_VIEW);
+        
+        ResponseEntity<String> responseEntity = testViewController.yaml(COMPANY_NUMBER, request, response);
+        
+        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
+                .getVariable(ViewController.CONTEXT_VAR_NAME);
+        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
+        assertEquals(ViewController.YAML_CONTENT_TYPE, responseEntity.getHeaders().getContentType().toString());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+    
     private void mockTemplateProcess(String viewName) {
         when(templateEngine.process(eq(viewName), contextCaptor.capture()))
                 .thenReturn(viewName);
