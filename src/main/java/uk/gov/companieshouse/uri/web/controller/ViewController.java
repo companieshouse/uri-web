@@ -1,10 +1,12 @@
 package uk.gov.companieshouse.uri.web.controller;
 
+import java.nio.charset.StandardCharsets;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,10 +34,30 @@ public class ViewController {
     protected static final String CONTEXT_VAR_NAME = "company";
     protected static final String LINES_WITH_JUST_WHITESPACE_REG_EXP = "(?m)^\\s*\n";
     
-    protected static final String RDF_CONTENT_TYPE = "application/rdf+xml";
-    protected static final String CSV_CONTENT_TYPE = "text/csv";
-    protected static final String YAML_CONTENT_TYPE = "application/yaml";
+    protected static final String APPLICATION_RDFXML = "application/rdf+xml";
+    protected static final String APPLICATION_XXML = "application/x-xml";
+    protected static final String TEXT_CSV = "text/csv";
+    protected static final String TEXT_COMMA_SEPARATED_VALUES = "text/comma-separated-values";
+    protected static final String APPLICATION_CSV = "application/csv";
+    protected static final String APPLICATION_EXCEL = "application/excel";
+    protected static final String APPLICATION_YAML = "application/yaml";
+    protected static final String APPLICATION_XYAML = "application/x-yaml";
+    protected static final String TEXT_YAML = "text/yaml";
+    protected static final String TEXT_XYAML = "text/x-yaml";
     
+    protected static final MediaType HTML_RESPONSE_MEDIA_TYPE = new MediaType(MediaType.TEXT_HTML, 
+            StandardCharsets.UTF_8);
+    protected static final MediaType JSON_RESPONSE_MEDIA_TYPE = new MediaType(MediaType.APPLICATION_JSON, 
+            StandardCharsets.UTF_8);
+    protected static final MediaType RDF_RESPONSE_MEDIA_TYPE = new MediaType("application", "rdf+xml", 
+            StandardCharsets.UTF_8);
+    protected static final MediaType XML_RESPONSE_MEDIA_TYPE = new MediaType(MediaType.TEXT_XML, 
+            StandardCharsets.UTF_8);
+    protected static final MediaType CSV_RESPONSE_MEDIA_TYPE = new MediaType("text", "csv", 
+            StandardCharsets.UTF_8);
+    protected static final MediaType YAML_RESPONSE_MEDIA_TYPE = new MediaType("application", "yaml", 
+            StandardCharsets.UTF_8);
+  
     private Logger logger;
     
     private CompanyService companyService;
@@ -58,9 +80,7 @@ public class ViewController {
     public ResponseEntity<String> html(@PathVariable String companyNumber, HttpServletRequest request,
             HttpServletResponse response) {
         
-        return new ResponseEntity<>(renderView(companyNumber, HTML_VIEW, request, response), 
-                contentTypeHeader(MediaType.TEXT_HTML_VALUE),
-                HttpStatus.OK);
+        return okResponse(renderView(companyNumber, HTML_VIEW, request, response), HTML_RESPONSE_MEDIA_TYPE);
     }
     
     @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.json"}, 
@@ -68,49 +88,39 @@ public class ViewController {
     public ResponseEntity<String> json(@PathVariable String companyNumber, HttpServletRequest request, 
             HttpServletResponse response) {
 
-        return new ResponseEntity<>(renderView(companyNumber, JSON_VIEW, request, response),
-                contentTypeHeader(MediaType.APPLICATION_JSON_VALUE),
-                HttpStatus.OK);
+        return okResponse(renderView(companyNumber, JSON_VIEW, request, response), JSON_RESPONSE_MEDIA_TYPE);
     }
     
     @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.rdf"}, 
-            produces = RDF_CONTENT_TYPE)
+            produces = APPLICATION_RDFXML)
     public ResponseEntity<String> rdf(@PathVariable String companyNumber, HttpServletRequest request, 
             HttpServletResponse response) {
 
-        return new ResponseEntity<>(renderView(companyNumber, RDF_VIEW, request, response),
-                contentTypeHeader(RDF_CONTENT_TYPE),
-                HttpStatus.OK);
+        return okResponse(renderView(companyNumber, RDF_VIEW, request, response), RDF_RESPONSE_MEDIA_TYPE);
     }
     
     @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.xml"}, 
-            produces = MediaType.APPLICATION_XML_VALUE)
+            produces = {MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_XML_VALUE, APPLICATION_XXML})
     public ResponseEntity<String> xml(@PathVariable String companyNumber, HttpServletRequest request, 
             HttpServletResponse response) {
 
-        return new ResponseEntity<>(renderView(companyNumber, XML_VIEW, request, response),
-                contentTypeHeader(MediaType.APPLICATION_XML_VALUE),
-                HttpStatus.OK);
+        return okResponse(renderView(companyNumber, XML_VIEW, request, response), XML_RESPONSE_MEDIA_TYPE);
     }
     
     @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.csv"}, 
-            produces = CSV_CONTENT_TYPE)
+            produces = {TEXT_CSV, TEXT_COMMA_SEPARATED_VALUES, APPLICATION_CSV, APPLICATION_EXCEL})
     public ResponseEntity<String> csv(@PathVariable String companyNumber, HttpServletRequest request, 
             HttpServletResponse response) {
 
-        return new ResponseEntity<>(renderView(companyNumber, CSV_VIEW, request, response),
-                contentTypeHeader(CSV_CONTENT_TYPE),
-                HttpStatus.OK);
+        return okResponse(renderView(companyNumber, CSV_VIEW, request, response), CSV_RESPONSE_MEDIA_TYPE);
     }
     
     @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.yaml"}, 
-            produces = YAML_CONTENT_TYPE)
+            produces = {APPLICATION_YAML, APPLICATION_XYAML, TEXT_YAML, TEXT_XYAML})
     public ResponseEntity<String> yaml(@PathVariable String companyNumber, HttpServletRequest request, 
             HttpServletResponse response) {
 
-        return new ResponseEntity<>(renderView(companyNumber, YAML_VIEW, request, response),
-                contentTypeHeader(YAML_CONTENT_TYPE),
-                HttpStatus.OK);
+        return okResponse(renderView(companyNumber, YAML_VIEW, request, response), YAML_RESPONSE_MEDIA_TYPE);
     }
     
     private String renderView(String companyNumber, String viewName, HttpServletRequest request, HttpServletResponse response) {
@@ -124,9 +134,11 @@ public class ViewController {
         return rendered.replaceAll(LINES_WITH_JUST_WHITESPACE_REG_EXP, "");
     }
     
-    private HttpHeaders contentTypeHeader(String contentTypeValue) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, contentTypeValue);
-        return headers;
+    private ResponseEntity<String> okResponse(String body, MediaType mediaType) {
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                .cacheControl(CacheControl.noStore().mustRevalidate())
+                .body(body);
     }
 }

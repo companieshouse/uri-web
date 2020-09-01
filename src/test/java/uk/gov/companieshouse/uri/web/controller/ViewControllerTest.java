@@ -65,82 +65,64 @@ class ViewControllerTest {
     void html() {
         mockTemplateProcess(ViewController.HTML_VIEW);
         
-        ResponseEntity<String> responseEntity = testViewController.html(COMPANY_NUMBER, request, response);
-        
-        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
-                .getVariable(ViewController.CONTEXT_VAR_NAME);
-        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
-        assertEquals(MediaType.TEXT_HTML, responseEntity.getHeaders().getContentType());
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertModelAndResponse(testViewController.html(COMPANY_NUMBER, request, response), 
+                MediaType.TEXT_HTML_VALUE);
     }
     
     @Test
     void json() {
         mockTemplateProcess(ViewController.JSON_VIEW);
         
-        ResponseEntity<String> responseEntity = testViewController.json(COMPANY_NUMBER, request, response);
-        
-        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
-                .getVariable(ViewController.CONTEXT_VAR_NAME);
-        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
-        assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertModelAndResponse(testViewController.json(COMPANY_NUMBER, request, response), 
+                MediaType.APPLICATION_JSON_VALUE);
     }
     
     @Test
     void rdf() {
         mockTemplateProcess(ViewController.RDF_VIEW);
         
-        ResponseEntity<String> responseEntity = testViewController.rdf(COMPANY_NUMBER, request, response);
-        
-        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
-                .getVariable(ViewController.CONTEXT_VAR_NAME);
-        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
-        assertEquals(ViewController.RDF_CONTENT_TYPE, responseEntity.getHeaders().getContentType().toString());
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertModelAndResponse(testViewController.rdf(COMPANY_NUMBER, request, response), 
+                ViewController.APPLICATION_RDFXML);
     }
     
     @Test
     void xml() {
         mockTemplateProcess(ViewController.XML_VIEW);
         
-        ResponseEntity<String> responseEntity = testViewController.xml(COMPANY_NUMBER, request, response);
-        
-        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
-                .getVariable(ViewController.CONTEXT_VAR_NAME);
-        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
-        assertEquals(MediaType.APPLICATION_XML, responseEntity.getHeaders().getContentType());
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertModelAndResponse(testViewController.xml(COMPANY_NUMBER, request, response), 
+                MediaType.TEXT_XML_VALUE);
     }
     
     @Test
     void csv() {
         mockTemplateProcess(ViewController.CSV_VIEW);
-        
-        ResponseEntity<String> responseEntity = testViewController.csv(COMPANY_NUMBER, request, response);
-        
-        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
-                .getVariable(ViewController.CONTEXT_VAR_NAME);
-        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
-        assertEquals(ViewController.CSV_CONTENT_TYPE, responseEntity.getHeaders().getContentType().toString());
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        assertModelAndResponse(testViewController.csv(COMPANY_NUMBER, request, response), 
+                ViewController.TEXT_CSV);
     }
     
     @Test
     void yaml() {
         mockTemplateProcess(ViewController.YAML_VIEW);
-        
-        ResponseEntity<String> responseEntity = testViewController.yaml(COMPANY_NUMBER, request, response);
-        
-        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
-                .getVariable(ViewController.CONTEXT_VAR_NAME);
-        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
-        assertEquals(ViewController.YAML_CONTENT_TYPE, responseEntity.getHeaders().getContentType().toString());
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        assertModelAndResponse(testViewController.yaml(COMPANY_NUMBER, request, response), 
+                ViewController.APPLICATION_YAML);
     }
     
     private void mockTemplateProcess(String viewName) {
         when(templateEngine.process(eq(viewName), contextCaptor.capture()))
                 .thenReturn(viewName);
+    }
+    
+    private void assertModelAndResponse(ResponseEntity<String> responseEntity, String contentType) {
+        CompanyDetails companyDetails = (CompanyDetails) contextCaptor.getValue()
+                .getVariable(ViewController.CONTEXT_VAR_NAME);
+        assertEquals(COMPANY_NUMBER, companyDetails.getCompanyNumber());
+        String responseContentType = responseEntity.getHeaders().getContentType().toString();
+        assertEquals(contentType, responseContentType.split(";")[0]);
+        assertEquals("charset=UTF-8", responseContentType.split(";")[1]);
+        assertEquals("*",responseEntity.getHeaders().getAccessControlAllowOrigin());
+        assertEquals("no-store, must-revalidate",responseEntity.getHeaders().getCacheControl());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 }
