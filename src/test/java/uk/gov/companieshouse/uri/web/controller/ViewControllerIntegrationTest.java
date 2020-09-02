@@ -243,7 +243,8 @@ public class ViewControllerIntegrationTest {
         result.andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, 
                         MediaType.TEXT_HTML_VALUE + UTF8_CHARSET_SUFFIX))
-                .andExpect(header().string(HttpHeaders.CACHE_CONTROL, "no-store, must-revalidate"));
+                .andExpect(header().string(HttpHeaders.CACHE_CONTROL, "no-store, must-revalidate"))
+                .andExpect(header().string(HttpHeaders.PRAGMA, "no-cache"));
     }
     
     @Test

@@ -139,6 +139,7 @@ public class ViewController {
                 .contentType(mediaType)
                 .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                 .cacheControl(CacheControl.noStore().mustRevalidate())
+                .header(HttpHeaders.PRAGMA, "no-cache")
                 .body(body);
     }
 }
