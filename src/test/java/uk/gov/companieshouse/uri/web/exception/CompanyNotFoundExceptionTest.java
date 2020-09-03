@@ -14,7 +14,7 @@ public class CompanyNotFoundExceptionTest {
     private static final String EXCEPTION_MESSAGE = "message";
     
     @Test
-    void serviceExceptionWithCause() {
+    void companyNotFoundExceptionWithCause() {
         CompanyNotFoundException exception = new CompanyNotFoundException(EXCEPTION_MESSAGE, new NullPointerException());
         
         assertEquals("message", exception.getMessage());
@@ -22,7 +22,7 @@ public class CompanyNotFoundExceptionTest {
     }
     
     @Test
-    void serviceExceptionWithoutCause() {
+    void companyNotFoundExceptionWithoutCause() {
         CompanyNotFoundException exception = new CompanyNotFoundException(EXCEPTION_MESSAGE);
         
         assertEquals("message", exception.getMessage());
