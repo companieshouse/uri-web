@@ -14,6 +14,7 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.charges.ChargesApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.uri.web.exception.CompanyNotFoundException;
 import uk.gov.companieshouse.uri.web.exception.ServiceException;
 
 @Service
@@ -48,6 +49,9 @@ public class ApiServiceImpl implements ApiService {
             return response.getData();
             
         } catch (ApiErrorResponseException e) {
+            if (e.getStatusCode() == HttpStatusCodes.STATUS_CODE_NOT_FOUND) {
+                throw new CompanyNotFoundException("Error retrieving company profile", e);
+            }
             logger.debug(FAILED_COMPANY_PROFILE_PREFIX + uri + FAILED_SUFFIX + e);
             throw new ServiceException("Error retrieving company profile", e);
         } catch (URIValidationException e) {
