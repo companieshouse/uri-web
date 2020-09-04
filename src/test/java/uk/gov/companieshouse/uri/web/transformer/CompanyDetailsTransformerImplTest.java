@@ -166,6 +166,17 @@ class CompanyDetailsTransformerImplTest {
         assertEquals(null, companyDetails.getAccounts().getAccountRefMonth());
     }
     
+    @Test
+    void profileApiToDetailsMissingLastAccounts() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.getAccounts().setLastAccounts(null);;
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals(null, companyDetails.getAccounts().getLastMadeUpDate());
+        assertEquals(null, companyDetails.getAccounts().getAccountCategory());
+    }
+    
     private CompanyProfileApi populatedCompanyProfileApi() {
         CompanyProfileApi companyProfileApi = new CompanyProfileApi();
         
