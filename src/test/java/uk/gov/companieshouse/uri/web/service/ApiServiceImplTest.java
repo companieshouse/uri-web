@@ -33,6 +33,7 @@ import uk.gov.companieshouse.api.model.charges.ChargesApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 
 import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.uri.web.exception.CompanyNotFoundException;
 import uk.gov.companieshouse.uri.web.exception.ServiceException;
 
 @ExtendWith(MockitoExtension.class)
@@ -118,6 +119,23 @@ class ApiServiceImplTest {
         });
 
         assertEquals("Invalid URI for company resource", exception.getMessage());
+        verify(mockApiClient, times(1)).company();
+        verify(companyResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER);
+        verify(companyGet, times(1)).execute();
+    }
+    
+    @Test
+    void getCompanyDetailsCompanyNotFoundException() throws ApiErrorResponseException, URIValidationException {
+        mockCompanyProfileApiCall();
+        final Builder builder = new HttpResponseException.Builder(HttpStatusCodes.STATUS_CODE_NOT_FOUND, "", new HttpHeaders());
+        ApiErrorResponseException apiErrorResponseException = new ApiErrorResponseException(builder);
+        when(companyGet.execute()).thenThrow(apiErrorResponseException);
+        
+        CompanyNotFoundException exception = assertThrows(CompanyNotFoundException.class, () -> {
+            testApiService.getCompanyProfile(COMPANY_NUMBER);
+        });
+
+        assertEquals("Error retrieving company profile", exception.getMessage());
         verify(mockApiClient, times(1)).company();
         verify(companyResourceHandler,times(1)).get(URI_PREFIX + COMPANY_NUMBER);
         verify(companyGet, times(1)).execute();
