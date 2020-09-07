@@ -42,7 +42,7 @@ Variable | Description|Example| Default
 Optional environment variables, mainly for links and common Javascript/CSS on error pages:
 Variable|Description|Example|Default
 -|-|-|-
-`HUMAN_LOG`        |Output JSON or human readable logs|`0` (JSON), `1` (human readable)| `0` (JSON)
+`HUMAN_LOG`        |Output JSON or human readable logs|`0` (JSON), `1` (human readable)| `0`
 `CDN_URL`|Base url for CND hosted resources|http://dpvdz1eqcaytm.cloudfront.net|N/A
 `POLICIES_URL`|Url for link to policy information|http://resources.companieshouse.gov.uk/serviceInformation.shtml|N/A
 `DEVELOPER_URL`|Url for link to developer site|https://developer.companieshouse.gov.uk| N/A
