@@ -43,8 +43,8 @@ Optional environment variables, mainly for links and common Javascript/CSS on er
 Variable|Description|Example|Default
 -|-|-|-
 `HUMAN_LOG`        |Output JSON or human readable logs|`0` (JSON), `1` (human readable)| `0`
-`CDN_URL`|Base url for CND hosted resources|http://dpvdz1eqcaytm.cloudfront.net|N/A
-`POLICIES_URL`|Url for link to policy information|http://resources.companieshouse.gov.uk/serviceInformation.shtml|N/A
-`DEVELOPER_URL`|Url for link to developer site|https://developer.companieshouse.gov.uk| N/A
-`CHS_URL`|Url for main CH service site|https://beta.companieshouse.gov.uk|N/A
-`GOVUK_CH_URL`|Url for CH gov.uk site|https://www.gov.uk/government/organisations/companies-house|N/A
+`CDN_URL`|Base URL for CND hosted resources|http://dpvdz1eqcaytm.cloudfront.net|N/A
+`POLICIES_URL`|URL for link to policy information|http://resources.companieshouse.gov.uk/serviceInformation.shtml|N/A
+`DEVELOPER_URL`|URL for link to developer site|https://developer.companieshouse.gov.uk| N/A
+`CHS_URL`|URL for main CH service site|https://beta.companieshouse.gov.uk|N/A
+`GOVUK_CH_URL`|URL for CH gov.uk site|https://www.gov.uk/government/organisations/companies-house|N/A
