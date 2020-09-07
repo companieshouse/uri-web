@@ -35,6 +35,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     private static final String ACCOUNTS_TYPE_BUNDLE_PREFIX = "transform.accounts.";
     private static final String SIC_BUNDLE_PREFIX = "transform.sic.";
     private static final String NO_SIC_AVAILABLE = "None Supplied";
+    private static final String PROFILE_LINKS_CHARGES = "charges";
     
     private ResourceBundle bundle;
     
@@ -113,7 +114,10 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         
         companyDetails.setSicCodes(transformSIC(companyProfileApi.getSicCodes()));
         
-        companyDetails.setHasCharges(companyProfileApi.isHasCharges());
+        if (companyProfileApi.getLinks() != null && 
+                companyProfileApi.getLinks().containsKey(PROFILE_LINKS_CHARGES)) {
+            companyDetails.setHasCharges(true);
+        }
         
         return companyDetails;
     }

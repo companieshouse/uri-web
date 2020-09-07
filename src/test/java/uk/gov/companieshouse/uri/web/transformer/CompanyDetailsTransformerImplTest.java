@@ -4,9 +4,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListResourceBundle;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,6 +71,7 @@ class CompanyDetailsTransformerImplTest {
         assertNull(companyDetails.getRegisteredOfficeAddress().getPostCode());
         assertEquals(1, companyDetails.getSicCodes().getSicText().length);
         assertEquals("None Supplied", companyDetails.getSicCodes().getSicText()[0]);
+        assertFalse(companyDetails.hasCharges());
     }
     
     @Test
@@ -105,6 +110,7 @@ class CompanyDetailsTransformerImplTest {
         assertEquals(2, sicCodes.getSicText().length);
         assertEquals("transform.sic.51110", sicCodes.getSicText()[0]);
         assertEquals("transform.sic.23423", sicCodes.getSicText()[1]);
+        assertTrue(companyDetails.hasCharges());
     }
     
     @Test
@@ -177,6 +183,16 @@ class CompanyDetailsTransformerImplTest {
         assertNull(companyDetails.getAccounts().getAccountCategory());
     }
     
+    @Test
+    void profileApiToDetailsMissingChargesLink() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.getLinks().clear();
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertFalse(companyDetails.hasCharges());
+    }
+    
     private CompanyProfileApi populatedCompanyProfileApi() {
         CompanyProfileApi companyProfileApi = new CompanyProfileApi();
         
@@ -231,6 +247,10 @@ class CompanyDetailsTransformerImplTest {
         
         String[] sicCodes = {"51110", "23423"};
         companyProfileApi.setSicCodes(sicCodes);
+        
+        Map<String,String> links = new TreeMap<>();
+        links.put("charges", "/company/05448736/charges");
+        companyProfileApi.setLinks(links);
         
         return companyProfileApi;
     }
