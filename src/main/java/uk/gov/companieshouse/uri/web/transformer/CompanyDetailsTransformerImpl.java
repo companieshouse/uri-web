@@ -89,8 +89,10 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
             }
             accounts.setNextDueDate(transformDate(apiAccounts.getNextDue()));
             LastAccountsApi apiLastAccounts = apiAccounts.getLastAccounts();
-            accounts.setLastMadeUpDate(transformDate(apiLastAccounts.getMadeUpTo()));
-            accounts.setAccountCategory(transformAccountsType(apiLastAccounts.getType()));
+            if (apiLastAccounts != null) {
+                accounts.setLastMadeUpDate(transformDate(apiLastAccounts.getMadeUpTo()));
+                accounts.setAccountCategory(transformAccountsType(apiLastAccounts.getType()));
+            }
         }
         companyDetails.setAccounts(accounts);
         
