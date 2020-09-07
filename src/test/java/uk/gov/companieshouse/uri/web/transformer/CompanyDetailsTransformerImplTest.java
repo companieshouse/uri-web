@@ -41,30 +41,30 @@ class CompanyDetailsTransformerImplTest {
     void profileApiToDetailsEmptyCompanyProfileApi() {
         CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(new CompanyProfileApi());
         
-        assertEquals(null, companyDetails.getCompanyNumber());
-        assertEquals(null, companyDetails.getCompanyName());
-        assertEquals(null, companyDetails.getIncorporationDate());
-        assertEquals(null, companyDetails.getDissolutionDate());
+        assertNull(companyDetails.getCompanyNumber());
+        assertNull(companyDetails.getCompanyName());
+        assertNull(companyDetails.getIncorporationDate());
+        assertNull(companyDetails.getDissolutionDate());
         assertEquals("transform.status.null", companyDetails.getCompanyStatus());
         assertEquals("transform.type.null", companyDetails.getCompanyType());
         assertEquals("transform.jurisdiction.null", companyDetails.getCountryOfOrigin());
-        assertEquals(null, companyDetails.getAccounts().getAccountCategory());
-        assertEquals(null, companyDetails.getAccounts().getAccountRefDay());
-        assertEquals(null, companyDetails.getAccounts().getAccountRefMonth());
-        assertEquals(null, companyDetails.getAccounts().getLastMadeUpDate());
-        assertEquals(null, companyDetails.getAccounts().getNextDueDate());
-        assertEquals(null, companyDetails.getReturns().getLastMadeUpDate());
-        assertEquals(null, companyDetails.getReturns().getNextDueDate());
+        assertNull(companyDetails.getAccounts().getAccountCategory());
+        assertNull(companyDetails.getAccounts().getAccountRefDay());
+        assertNull(companyDetails.getAccounts().getAccountRefMonth());
+        assertNull(companyDetails.getAccounts().getLastMadeUpDate());
+        assertNull(companyDetails.getAccounts().getNextDueDate());
+        assertNull(companyDetails.getReturns().getLastMadeUpDate());
+        assertNull(companyDetails.getReturns().getNextDueDate());
         assertEquals(0, companyDetails.getPreviousNames().length);
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getCareOf());
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getPoBox());
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getPremises());
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getAddressLine1());
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getAddressLine2());
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getPostTown());
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getRegion());
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getCountry());
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getPostCode());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getCareOf());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getPoBox());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getPremises());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getAddressLine1());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getAddressLine2());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getPostTown());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getRegion());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getCountry());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getPostCode());
         assertEquals(1, companyDetails.getSicCodes().getSicText().length);
         assertEquals("None Supplied", companyDetails.getSicCodes().getSicText()[0]);
     }
@@ -142,7 +142,7 @@ class CompanyDetailsTransformerImplTest {
 
         CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
         
-        assertEquals(null, companyDetails.getRegisteredOfficeAddress().getCountry());
+        assertNull(companyDetails.getRegisteredOfficeAddress().getCountry());
     }
     
     @Test
@@ -162,8 +162,8 @@ class CompanyDetailsTransformerImplTest {
 
         CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
         
-        assertEquals(null, companyDetails.getAccounts().getAccountRefDay());
-        assertEquals(null, companyDetails.getAccounts().getAccountRefMonth());
+        assertNull(companyDetails.getAccounts().getAccountRefDay());
+        assertNull(companyDetails.getAccounts().getAccountRefMonth());
     }
     
     @Test
@@ -173,8 +173,8 @@ class CompanyDetailsTransformerImplTest {
 
         CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
         
-        assertEquals(null, companyDetails.getAccounts().getLastMadeUpDate());
-        assertEquals(null, companyDetails.getAccounts().getAccountCategory());
+        assertNull(companyDetails.getAccounts().getLastMadeUpDate());
+        assertNull(companyDetails.getAccounts().getAccountCategory());
     }
     
     private CompanyProfileApi populatedCompanyProfileApi() {
