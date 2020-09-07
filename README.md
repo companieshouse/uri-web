@@ -34,17 +34,17 @@ In order to build and run this Web App locally you will need to install:
 
 ### Configuration
 Required environment variables:
-Key                | Description
--------------------|------------------------------------
-`CHS_API_KEY` |The API key to use to authenticate with the CHS APIs (see https://developer.companieshouse.gov.uk)
-`API_URL`|The URL of the CHS API to use - e.g. https://api.companieshouse.gov.uk
+Variable | Description|Example| Default
+-|-|-|-
+`CHS_API_KEY` |The API key to use to authenticate with the CHS APIs (see https://developer.companieshouse.gov.uk)|`7aPeBkeorUFphM_6PKrMuI-uB9r-3Z92bBe1iTT0`|N/A
+`API_URL`|The URL of the CHS API to use|https://api.companieshouse.gov.uk|N/A
 
 Optional environment variables, mainly for links and common Javascript/CSS on error pages:
-Key                | Description
--------------------|------------------------------------
-`HUMAN_LOG`        |`1`- For human readable logs, `0`(default)- for JSON logs
-`CDN_URL`|E.g. http://dpvdz1eqcaytm.cloudfront.net
-`POLICIES_URL`|E.g. http://resources.companieshouse.gov.uk/serviceInformation.shtml
-`DEVELOPER_URL`|E.g. https://developer.companieshouse.gov.uk
-`CHS_URL`|E.g. https://beta.companieshouse.gov.uk
-`GOVUK_CH_URL`|E.g. https://www.gov.uk/government/organisations/companies-house
+Variable|Description|Example|Default
+-|-|-|-
+`HUMAN_LOG`        |Output JSON or human readable logs|`0` (JSON), `1` (human readable)| `0` (JSON)
+`CDN_URL`|Base url for CND hosted resources|http://dpvdz1eqcaytm.cloudfront.net|N/A
+`POLICIES_URL`|Url for link to policy information|http://resources.companieshouse.gov.uk/serviceInformation.shtml|N/A
+`DEVELOPER_URL`|Url for link to developer site|https://developer.companieshouse.gov.uk| N/A
+`CHS_URL`|Url for main CH service site|https://beta.companieshouse.gov.uk|N/A
+`GOVUK_CH_URL`|Url for CH gov.uk site|https://www.gov.uk/government/organisations/companies-house|N/A
