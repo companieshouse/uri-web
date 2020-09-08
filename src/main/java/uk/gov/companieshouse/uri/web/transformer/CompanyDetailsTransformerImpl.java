@@ -18,6 +18,8 @@ import uk.gov.companieshouse.api.model.company.RegisteredOfficeAddressApi;
 import uk.gov.companieshouse.api.model.company.account.AccountingReferenceDateApi;
 import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
+import uk.gov.companieshouse.api.model.company.foreigncompany.ForeignCompanyDetailsApi;
+import uk.gov.companieshouse.api.model.company.foreigncompany.OriginatingRegistryApi;
 import uk.gov.companieshouse.uri.web.model.Accounts;
 import uk.gov.companieshouse.uri.web.model.Address;
 import uk.gov.companieshouse.uri.web.model.CompanyDetails;
@@ -36,6 +38,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     private static final String SIC_BUNDLE_PREFIX = "transform.sic.";
     private static final String NO_SIC_AVAILABLE = "None Supplied";
     private static final String PROFILE_LINKS_CHARGES = "charges";
+    private static final String OVERSEA_COMPANY = "oversea-company";
     
     private ResourceBundle bundle;
     
@@ -75,7 +78,13 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
             companyDetails.setCompanyStatus(transformCompanyStatus(companyProfileApi.getCompanyStatus()));
         }
         
-        companyDetails.setCountryOfOrigin(transformCompanyJurisdiction(companyProfileApi.getJurisdiction()));
+        String foreignCompanyRegistryCountry = getForeignCompanyRegistryCountry(companyProfileApi);
+        if (foreignCompanyRegistryCountry != null) {
+            companyDetails.setCountryOfOrigin(foreignCompanyRegistryCountry);
+        } else {
+            companyDetails.setCountryOfOrigin(transformCompanyJurisdiction(companyProfileApi.getJurisdiction()));
+        }
+        
         companyDetails.setDissolutionDate(transformDate(companyProfileApi.getDateOfCessation()));
         companyDetails.setIncorporationDate(transformDate(companyProfileApi.getDateOfCreation()));
         companyDetails.setPreviousNames(transformPreviousNames(companyProfileApi.getPreviousCompanyNames()));
@@ -204,5 +213,18 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     
     private int transformChargeCount(Long count) {      
         return count == null ? 0 : count.intValue();   
+    }
+    
+    private String getForeignCompanyRegistryCountry(CompanyProfileApi companyProfileApi) {
+        if (OVERSEA_COMPANY.equals(companyProfileApi.getType())) {
+            ForeignCompanyDetailsApi foreignCompanyDetailsApi = companyProfileApi.getForeignCompanyDetails();
+            if (foreignCompanyDetailsApi !=null) {
+                OriginatingRegistryApi orgininatingRegistryApi = foreignCompanyDetailsApi.getOriginatingRegistry();
+                if (orgininatingRegistryApi != null) {
+                    return orgininatingRegistryApi.getCountry();
+                }
+            }
+        }
+        return null;
     }
 }
