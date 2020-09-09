@@ -1,4 +1,5 @@
 
+
 # uri-web
 Microservice version of CH URI service.
 
@@ -36,15 +37,15 @@ In order to build and run this Web App locally you will need to install:
 Required environment variables:
 Variable | Description|Example| Default
 -|-|-|-
-`CHS_API_KEY` |The API key to use to authenticate with the CHS APIs (see https://developer.companieshouse.gov.uk)|`7aPeBkeorUFphM_6PKrMuI-uB9r-3Z92bBe1iTT0`|N/A
-`API_URL`|The URL of the CHS API to use|https://api.companieshouse.gov.uk|N/A
+`CHS_API_KEY` |The API key to use to authenticate with the CHS APIs (see https://developer.companieshouse.gov.uk). Provided by global env on CHS environment.|`7aPeBkeorUFphM_6PKrMuI-uB9r-3Z92bBe1iTT0`|N/A
+`API_URL`|The URL of the CHS API to use. Provided by global env on CHS environment.|https://api.companieshouse.gov.uk|N/A
 
 Optional environment variables, mainly for links and common Javascript/CSS on error pages:
 Variable|Description|Example|Default
 -|-|-|-
 `HUMAN_LOG`        |Output JSON or human readable logs|`0` (JSON), `1` (human readable)| `0`
-`CDN_URL`|Base URL for CND hosted resources|http://dpvdz1eqcaytm.cloudfront.net|N/A
-`POLICIES_URL`|URL for link to policy information|http://resources.companieshouse.gov.uk/serviceInformation.shtml|N/A
-`DEVELOPER_URL`|URL for link to developer site|https://developer.companieshouse.gov.uk| N/A
-`CHS_URL`|URL for main CH service site|https://beta.companieshouse.gov.uk|N/A
+`CDN_HOST`|Host for CND hosted resources. Provided by global env on CHS environment.|dpvdz1eqcaytm.cloudfront.net|N/A
+`DEVELOPER_URL`|URL for link to developer site. Provided by global env on CHS environment.|https://developer.companieshouse.gov.uk| N/A
+`CHS_URL`|URL for main CH service site. Provided by global env on CHS environment.|https://beta.companieshouse.gov.uk|N/A
 `GOVUK_CH_URL`|URL for CH gov.uk site|https://www.gov.uk/government/organisations/companies-house|N/A
+`POLICIES_URL`|URL for link to policy information|http://resources.companieshouse.gov.uk/serviceInformation.shtml|N/A
