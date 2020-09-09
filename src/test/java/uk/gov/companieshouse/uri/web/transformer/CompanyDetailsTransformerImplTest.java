@@ -26,6 +26,8 @@ import uk.gov.companieshouse.api.model.company.RegisteredOfficeAddressApi;
 import uk.gov.companieshouse.api.model.company.account.AccountingReferenceDateApi;
 import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
+import uk.gov.companieshouse.api.model.company.foreigncompany.ForeignCompanyDetailsApi;
+import uk.gov.companieshouse.api.model.company.foreigncompany.OriginatingRegistryApi;
 import uk.gov.companieshouse.uri.web.model.CompanyDetails;
 import uk.gov.companieshouse.uri.web.model.MortgageTotals;
 import uk.gov.companieshouse.uri.web.model.SicCodes;
@@ -34,6 +36,9 @@ import uk.gov.companieshouse.uri.web.transformer.CompanyDetailsTransformer;
 @ExtendWith(MockitoExtension.class)
 class CompanyDetailsTransformerImplTest {
 
+    private static final String OVERSEA_COMPANY = "oversea-company";
+    private static final String ENGLAND_WALES_MESSAGE_KEY = "transform.jurisdiction.england-wales";
+    
     private CompanyDetailsTransformer testCompanyDetailsTransformer;
 
     @BeforeEach
@@ -84,7 +89,7 @@ class CompanyDetailsTransformerImplTest {
         assertEquals("03/02/2020", companyDetails.getDissolutionDate());
         assertEquals("transform.status.status-detail", companyDetails.getCompanyStatus());
         assertEquals("transform.type.ltd", companyDetails.getCompanyType());
-        assertEquals("transform.jurisdiction.england-wales", companyDetails.getCountryOfOrigin());
+        assertEquals(ENGLAND_WALES_MESSAGE_KEY, companyDetails.getCountryOfOrigin());
         assertEquals("transform.accounts.micro", companyDetails.getAccounts().getAccountCategory());
         assertEquals("21", companyDetails.getAccounts().getAccountRefDay());
         assertEquals("2", companyDetails.getAccounts().getAccountRefMonth());
@@ -193,6 +198,39 @@ class CompanyDetailsTransformerImplTest {
         assertFalse(companyDetails.hasCharges());
     }
     
+    @Test
+    void profileApiToDetailsOverseaCompanyWithOriginatingRegistryPresent() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setForeignCompanyDetails(foreignCompanyDetails(true, true));
+        companyProfileApi.setType(OVERSEA_COMPANY);
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals("Ireland", companyDetails.getCountryOfOrigin());
+    }
+    
+    @Test
+    void profileApiToDetailsOverseaCompanyWithOriginatingRegistryAbsent() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setForeignCompanyDetails(foreignCompanyDetails(true, false));
+        companyProfileApi.setType(OVERSEA_COMPANY);
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals(ENGLAND_WALES_MESSAGE_KEY, companyDetails.getCountryOfOrigin());
+    }
+    
+    @Test
+    void profileApiToDetailsOverseaCompanyWithForeignCompanyDetailsAbsent() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setForeignCompanyDetails(foreignCompanyDetails(false, false));
+        companyProfileApi.setType(OVERSEA_COMPANY);
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals(ENGLAND_WALES_MESSAGE_KEY, companyDetails.getCountryOfOrigin());
+    }
+    
     private CompanyProfileApi populatedCompanyProfileApi() {
         CompanyProfileApi companyProfileApi = new CompanyProfileApi();
         
@@ -278,6 +316,22 @@ class CompanyDetailsTransformerImplTest {
         assertEquals(5, mortgageTotals.getNumMortSatisfied());
         assertEquals(2, mortgageTotals.getNumMortPartSatisfied());
         assertEquals(14, mortgageTotals.getNumMortOutstanding());
+    }
+    
+    private ForeignCompanyDetailsApi foreignCompanyDetails(boolean populateForeignCompanyDetails,
+            boolean populateOriginatingRegistry) {
+        
+        if (populateForeignCompanyDetails) {
+            ForeignCompanyDetailsApi foreignCompanyDetailsApi = new ForeignCompanyDetailsApi();
+            if (populateOriginatingRegistry) {
+                OriginatingRegistryApi originatingRegistryApi  = new OriginatingRegistryApi();
+                originatingRegistryApi.setCountry("Ireland");
+                foreignCompanyDetailsApi.setOriginatingRegistry(originatingRegistryApi);
+            }
+            return foreignCompanyDetailsApi;
+        }
+        
+        return null;
     }
     
     class MsgResourceBundle extends ListResourceBundle {
