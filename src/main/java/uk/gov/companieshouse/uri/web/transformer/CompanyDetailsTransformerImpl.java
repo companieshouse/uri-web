@@ -234,11 +234,8 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     }
     
     private boolean isCompanyDissolved(CompanyProfileApi companyProfileApi) {
-        if (COMPANY_STATUS_DISSOLVED.equals(companyProfileApi.getCompanyStatus()) || 
-                COMPANY_STATUS_CLOSED.equals(companyProfileApi.getCompanyStatus())) {
-            return true;
-        }
-        return false;
+        return COMPANY_STATUS_DISSOLVED.equals(companyProfileApi.getCompanyStatus()) || 
+                COMPANY_STATUS_CLOSED.equals(companyProfileApi.getCompanyStatus());
     }
     
     private String getForeignCompanyRegistryCountry(CompanyProfileApi companyProfileApi) {
