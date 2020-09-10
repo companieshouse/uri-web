@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.springframework.stereotype.Component;
@@ -18,6 +19,8 @@ import uk.gov.companieshouse.api.model.company.RegisteredOfficeAddressApi;
 import uk.gov.companieshouse.api.model.company.account.AccountingReferenceDateApi;
 import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
+import uk.gov.companieshouse.api.model.company.foreigncompany.ForeignCompanyDetailsApi;
+import uk.gov.companieshouse.api.model.company.foreigncompany.OriginatingRegistryApi;
 import uk.gov.companieshouse.uri.web.model.Accounts;
 import uk.gov.companieshouse.uri.web.model.Address;
 import uk.gov.companieshouse.uri.web.model.CompanyDetails;
@@ -36,6 +39,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     private static final String SIC_BUNDLE_PREFIX = "transform.sic.";
     private static final String NO_SIC_AVAILABLE = "None Supplied";
     private static final String PROFILE_LINKS_CHARGES = "charges";
+    private static final String OVERSEA_COMPANY = "oversea-company";
     
     private ResourceBundle bundle;
     
@@ -52,20 +56,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         companyDetails.setCompanyName(companyProfileApi.getCompanyName());
         companyDetails.setCompanyNumber(companyProfileApi.getCompanyNumber());
         
-        Address detailsAddress = new Address();
-        RegisteredOfficeAddressApi apiAddress = companyProfileApi.getRegisteredOfficeAddress();
-        if (apiAddress != null) {
-            detailsAddress.setCareOf(upper(apiAddress.getCareOf()));
-            detailsAddress.setPoBox(upper(apiAddress.getPoBox()));
-            detailsAddress.setPremises(upper(apiAddress.getPremises()));
-            detailsAddress.setAddressLine1(upper(apiAddress.getAddressLine1()));
-            detailsAddress.setAddressLine2(upper(apiAddress.getAddressLine2()));
-            detailsAddress.setPostTown(upper(apiAddress.getLocality()));
-            detailsAddress.setRegion(upper(apiAddress.getRegion()));
-            detailsAddress.setCountry(upper(apiAddress.getCountry()));
-            detailsAddress.setPostCode(upper(apiAddress.getPostalCode()));
-        }
-        companyDetails.setRegisteredOfficeAddress(detailsAddress);
+        companyDetails.setRegisteredOfficeAddress(getRegisteredOfficeAddressDetails(companyProfileApi));
         
         companyDetails.setCompanyType(transformCompanyType(companyProfileApi.getType()));
         
@@ -75,42 +66,20 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
             companyDetails.setCompanyStatus(transformCompanyStatus(companyProfileApi.getCompanyStatus()));
         }
         
-        companyDetails.setCountryOfOrigin(transformCompanyJurisdiction(companyProfileApi.getJurisdiction()));
+        String foreignCompanyRegistryCountry = getForeignCompanyRegistryCountry(companyProfileApi);
+        if (foreignCompanyRegistryCountry != null) {
+            companyDetails.setCountryOfOrigin(foreignCompanyRegistryCountry);
+        } else {
+            companyDetails.setCountryOfOrigin(transformCompanyJurisdiction(companyProfileApi.getJurisdiction()));
+        }
+        
         companyDetails.setDissolutionDate(transformDate(companyProfileApi.getDateOfCessation()));
         companyDetails.setIncorporationDate(transformDate(companyProfileApi.getDateOfCreation()));
         companyDetails.setPreviousNames(transformPreviousNames(companyProfileApi.getPreviousCompanyNames()));
         
-        Accounts accounts = new Accounts();
-        CompanyAccountApi apiAccounts = companyProfileApi.getAccounts();
-        if (apiAccounts != null) {
-            AccountingReferenceDateApi accountingRefernceDateApi = apiAccounts.getAccountingReferenceDate();
-            if (accountingRefernceDateApi != null) {
-                accounts.setAccountRefDay(accountingRefernceDateApi.getDay());
-                accounts.setAccountRefMonth(accountingRefernceDateApi.getMonth());
-            }
-            accounts.setNextDueDate(transformDate(apiAccounts.getNextDue()));
-            LastAccountsApi apiLastAccounts = apiAccounts.getLastAccounts();
-            if (apiLastAccounts != null) {
-                accounts.setLastMadeUpDate(transformDate(apiLastAccounts.getMadeUpTo()));
-                accounts.setAccountCategory(transformAccountsType(apiLastAccounts.getType()));
-            }
-        }
-        companyDetails.setAccounts(accounts);
+        companyDetails.setAccounts(getAccountsDetails(companyProfileApi));
         
-        Returns returns = new Returns();
-        ConfirmationStatementApi apiConfirmationStatement =  companyProfileApi.getConfirmationStatement();
-        if (apiConfirmationStatement != null) {
-            returns.setNextDueDate(transformDate(apiConfirmationStatement.getNextDue()));
-            returns.setLastMadeUpDate(transformDate(apiConfirmationStatement.getLastMadeUpTo()));
-        } else {
-            //Fall back to annual return dates
-            AnnualReturnApi apiReturns = companyProfileApi.getAnnualReturn();
-            if(apiReturns != null) {
-                returns.setNextDueDate(transformDate(apiReturns.getNextDue()));
-                returns.setLastMadeUpDate(transformDate(apiReturns.getLastMadeUpTo()));
-            }
-        }
-        companyDetails.setReturns(returns);
+        companyDetails.setReturns(getReturnsDetails(companyProfileApi));
         
         companyDetails.setSicCodes(transformSIC(companyProfileApi.getSicCodes()));
         
@@ -134,6 +103,59 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
                 - mortgageTotals.getNumMortPartSatisfied());
         
         return mortgageTotals;
+    }
+    
+    private Address getRegisteredOfficeAddressDetails(CompanyProfileApi companyProfileApi) {
+        Address detailsAddress = new Address();
+        RegisteredOfficeAddressApi apiAddress = companyProfileApi.getRegisteredOfficeAddress();
+        if (apiAddress != null) {
+            detailsAddress.setCareOf(upper(apiAddress.getCareOf()));
+            detailsAddress.setPoBox(upper(apiAddress.getPoBox()));
+            detailsAddress.setPremises(upper(apiAddress.getPremises()));
+            detailsAddress.setAddressLine1(upper(apiAddress.getAddressLine1()));
+            detailsAddress.setAddressLine2(upper(apiAddress.getAddressLine2()));
+            detailsAddress.setPostTown(upper(apiAddress.getLocality()));
+            detailsAddress.setRegion(upper(apiAddress.getRegion()));
+            detailsAddress.setCountry(upper(apiAddress.getCountry()));
+            detailsAddress.setPostCode(upper(apiAddress.getPostalCode()));
+        }
+        return detailsAddress;
+    }
+    
+    private Accounts getAccountsDetails(CompanyProfileApi companyProfileApi) {
+        Accounts accounts = new Accounts();
+        CompanyAccountApi apiAccounts = companyProfileApi.getAccounts();
+        if (apiAccounts != null) {
+            AccountingReferenceDateApi accountingRefernceDateApi = apiAccounts.getAccountingReferenceDate();
+            if (accountingRefernceDateApi != null) {
+                accounts.setAccountRefDay(accountingRefernceDateApi.getDay());
+                accounts.setAccountRefMonth(accountingRefernceDateApi.getMonth());
+            }
+            accounts.setNextDueDate(transformDate(apiAccounts.getNextDue()));
+            LastAccountsApi apiLastAccounts = apiAccounts.getLastAccounts();
+            if (apiLastAccounts != null) {
+                accounts.setLastMadeUpDate(transformDate(apiLastAccounts.getMadeUpTo()));
+                accounts.setAccountCategory(transformAccountsType(apiLastAccounts.getType()));
+            }
+        }
+        return accounts;
+    }
+    
+    private Returns getReturnsDetails(CompanyProfileApi companyProfileApi) {
+        Returns returns = new Returns();
+        ConfirmationStatementApi apiConfirmationStatement =  companyProfileApi.getConfirmationStatement();
+        if (apiConfirmationStatement != null) {
+            returns.setNextDueDate(transformDate(apiConfirmationStatement.getNextDue()));
+            returns.setLastMadeUpDate(transformDate(apiConfirmationStatement.getLastMadeUpTo()));
+        } else {
+            //Fall back to annual return dates
+            AnnualReturnApi apiReturns = companyProfileApi.getAnnualReturn();
+            if(apiReturns != null) {
+                returns.setNextDueDate(transformDate(apiReturns.getNextDue()));
+                returns.setLastMadeUpDate(transformDate(apiReturns.getLastMadeUpTo()));
+            }
+        }
+        return returns;
     }
     
     private String upper(String value) {
@@ -204,5 +226,15 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     
     private int transformChargeCount(Long count) {      
         return count == null ? 0 : count.intValue();   
+    }
+    
+    private String getForeignCompanyRegistryCountry(CompanyProfileApi companyProfileApi) {
+        if (OVERSEA_COMPANY.equals(companyProfileApi.getType())) {
+            return Optional.ofNullable(companyProfileApi.getForeignCompanyDetails())
+                    .map(ForeignCompanyDetailsApi::getOriginatingRegistry)
+                    .map(OriginatingRegistryApi::getCountry)
+                    .orElse(null);
+        }
+        return null;
     }
 }
