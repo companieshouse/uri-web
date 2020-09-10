@@ -29,9 +29,14 @@ public class CompanyDetails extends FieldTransformer {
     private String countryOfOrigin;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonProperty(value = "RegistrationDate")
+    private String registrationDate;
+    
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "DissolutionDate")
     private String dissolutionDate;
     
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty(value = "IncorporationDate")
     private String incorporationDate;
     
@@ -55,22 +60,6 @@ public class CompanyDetails extends FieldTransformer {
     @JsonProperty(value = "SICCodes")
     private SicCodes sicCodes;
 
-    public Accounts getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(Accounts accounts) {
-        this.accounts = accounts;
-    }
-
-    public Returns getReturns() {
-        return returns;
-    }
-
-    public void setReturns(Returns returns) {
-        this.returns = returns;
-    }
-
     public String getCompanyName() {
         return companyName;
     }
@@ -87,38 +76,14 @@ public class CompanyDetails extends FieldTransformer {
         this.companyNumber = companyNumber;
     }
 
-    public String getCompanyStatus() {
-        return companyStatus;
+    public Address getRegisteredOfficeAddress() {
+        return registeredOfficeAddress;
     }
 
-    public void setCompanyStatus(String companyStatus) {
-        this.companyStatus = companyStatus;
+    public void setRegisteredOfficeAddress(Address registeredOfficeAddress) {
+        this.registeredOfficeAddress = registeredOfficeAddress;
     }
 
-    public String getIncorporationDate() {
-        return incorporationDate;
-    }
-
-    public void setIncorporationDate(String incorporationDate) {
-        this.incorporationDate = incorporationDate;
-    }
-    
-    public String getDissolutionDate() {
-        return dissolutionDate;
-    }
-
-    public void setDissolutionDate(String dissolutionDate) {
-        this.dissolutionDate = dissolutionDate;
-    }
-
-    public PreviousName[] getPreviousNames() {
-        return previousNames;
-    }
-
-    public void setPreviousNames(PreviousName[] previousNames) {
-        this.previousNames = previousNames;
-    }
-    
     public String getCompanyType() {
         return companyType;
     }
@@ -127,12 +92,12 @@ public class CompanyDetails extends FieldTransformer {
         this.companyType = companyType;
     }
 
-    public boolean hasCharges() {
-        return hasCharges;
+    public String getCompanyStatus() {
+        return companyStatus;
     }
 
-    public void setHasCharges(boolean hasCharges) {
-        this.hasCharges = hasCharges;
+    public void setCompanyStatus(String companyStatus) {
+        this.companyStatus = companyStatus;
     }
 
     public String getCountryOfOrigin() {
@@ -143,20 +108,52 @@ public class CompanyDetails extends FieldTransformer {
         this.countryOfOrigin = countryOfOrigin;
     }
 
-    public Address getRegisteredOfficeAddress() {
-        return registeredOfficeAddress;
+    public String getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegisteredOfficeAddress(Address registeredOfficeAddress) {
-        this.registeredOfficeAddress = registeredOfficeAddress;
+    public void setRegistrationDate(String registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
-    public SicCodes getSicCodes() {
-        return sicCodes;
+    public String getDissolutionDate() {
+        return dissolutionDate;
     }
 
-    public void setSicCodes(SicCodes sicCodes) {
-        this.sicCodes = sicCodes;
+    public void setDissolutionDate(String dissolutionDate) {
+        this.dissolutionDate = dissolutionDate;
+    }
+
+    public String getIncorporationDate() {
+        return incorporationDate;
+    }
+
+    public void setIncorporationDate(String incorporationDate) {
+        this.incorporationDate = incorporationDate;
+    }
+
+    public PreviousName[] getPreviousNames() {
+        return previousNames;
+    }
+
+    public void setPreviousNames(PreviousName[] previousNames) {
+        this.previousNames = previousNames;
+    }
+
+    public Accounts getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Accounts accounts) {
+        this.accounts = accounts;
+    }
+
+    public Returns getReturns() {
+        return returns;
+    }
+
+    public void setReturns(Returns returns) {
+        this.returns = returns;
     }
 
     public MortgageTotals getMortgageTotals() {
@@ -167,37 +164,55 @@ public class CompanyDetails extends FieldTransformer {
         this.mortgageTotals = mortgageTotals;
     }
 
+    public boolean hasCharges() {
+        return hasCharges;
+    }
+
+    public void setHasCharges(boolean hasCharges) {
+        this.hasCharges = hasCharges;
+    }
+
+    public SicCodes getSicCodes() {
+        return sicCodes;
+    }
+
+    public void setSicCodes(SicCodes sicCodes) {
+        this.sicCodes = sicCodes;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("CompanyDetails [accounts=");
-        builder.append(accounts);
-        builder.append(", returns=");
-        builder.append(returns);
-        builder.append(", companyName=");
+        builder.append("CompanyDetails [companyName=");
         builder.append(companyName);
         builder.append(", companyNumber=");
         builder.append(companyNumber);
-        builder.append(", companyStatus=");
-        builder.append(companyStatus);
-        builder.append(", incorporationDate=");
-        builder.append(incorporationDate);
-        builder.append(", dissolutionDate=");
-        builder.append(dissolutionDate);
-        builder.append(", previousNames=");
-        builder.append(Arrays.toString(previousNames));
-        builder.append(", companyType=");
-        builder.append(companyType);
-        builder.append(", hasCharges=");
-        builder.append(hasCharges);
-        builder.append(", countryOfOrigin=");
-        builder.append(countryOfOrigin);
         builder.append(", registeredOfficeAddress=");
         builder.append(registeredOfficeAddress);
-        builder.append(", sicCodes=");
-        builder.append(sicCodes);
+        builder.append(", companyType=");
+        builder.append(companyType);
+        builder.append(", companyStatus=");
+        builder.append(companyStatus);
+        builder.append(", countryOfOrigin=");
+        builder.append(countryOfOrigin);
+        builder.append(", registrationDate=");
+        builder.append(registrationDate);
+        builder.append(", dissolutionDate=");
+        builder.append(dissolutionDate);
+        builder.append(", incorporationDate=");
+        builder.append(incorporationDate);
+        builder.append(", previousNames=");
+        builder.append(Arrays.toString(previousNames));
+        builder.append(", accounts=");
+        builder.append(accounts);
+        builder.append(", returns=");
+        builder.append(returns);
         builder.append(", mortgageTotals=");
         builder.append(mortgageTotals);
+        builder.append(", hasCharges=");
+        builder.append(hasCharges);
+        builder.append(", sicCodes=");
+        builder.append(sicCodes);
         builder.append("]");
         return builder.toString();
     }

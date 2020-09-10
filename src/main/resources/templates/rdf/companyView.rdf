@@ -13,7 +13,8 @@
   <rdf:Description th:attr="'rdf:about'=*{'http://business.data.gov.uk/id/company/' + companyNumber}">
     <cs0:SICCodes th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#SICCodes'}"/>
     <cs0:Accounts th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Accounts'}"/>
-    <cs0:IncorporationDate th:text="*{incorporationDate}"></cs0:IncorporationDate>
+    <cs0:RegistrationDate th:if="*{registrationDate}" th:text="*{registrationDate}"></cs0:RegistrationDate>
+    <cs0:IncorporationDate th:if="*{incorporationDate}" th:text="*{incorporationDate}"></cs0:IncorporationDate>
     <cs0:DissolutionDate th:if="*{dissolutionDate}" th:text="*{dissolutionDate}"></cs0:DissolutionDate>
     <cs0:Address th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#RegAddress'}"/>
     <cs0:Returns th:attr="'rdf:resource'=*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#Returns'}"/>

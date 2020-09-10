@@ -263,6 +263,83 @@ class CompanyDetailsTransformerImplTest {
         assertNull(companyDetails.getDissolutionDate());
     }
     
+    @Test
+    void profileApiToDetailsRegistrationDateWhenCompanyNumberPrefixNI() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyNumber("NI123456");
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertNull(companyDetails.getIncorporationDate());
+        assertEquals("01/01/2017", companyDetails.getRegistrationDate());
+    }
+    
+    @Test
+    void profileApiToDetailsRegistrationDateWhenCompanyNumberPrefixSE() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyNumber("SE123456");
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertNull(companyDetails.getIncorporationDate());
+        assertEquals("01/01/2017", companyDetails.getRegistrationDate());
+    }
+    
+    @Test
+    void profileApiToDetailsRegistrationDateWhenCompanyNumberPrefixLP() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyNumber("LP123456");
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertNull(companyDetails.getIncorporationDate());
+        assertEquals("01/01/2017", companyDetails.getRegistrationDate());
+    }
+    
+    @Test
+    void profileApiToDetailsIncorporationDateWhenCompanyNumberPrefixOC() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyNumber("OC123456");
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals("01/01/2017", companyDetails.getIncorporationDate());
+        assertNull(companyDetails.getRegistrationDate());
+    }
+    
+    @Test
+    void profileApiToDetailsIncorporationDateWhenCompanyNumberPrefixSO() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyNumber("SO123456");
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals("01/01/2017", companyDetails.getIncorporationDate());
+        assertNull(companyDetails.getRegistrationDate());
+    }
+    
+    @Test
+    void profileApiToDetailsIncorporationDateWhenCompanyNumberPrefixSC() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyNumber("SC123456");
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals("01/01/2017", companyDetails.getIncorporationDate());
+        assertNull(companyDetails.getRegistrationDate());
+    }
+    
+    @Test
+    void profileApiToDetailsIncorporationDateWhenCompanyNumberNumeric() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyNumber("01234567");
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals("01/01/2017", companyDetails.getIncorporationDate());
+        assertNull(companyDetails.getRegistrationDate());
+    }
+    
     private CompanyProfileApi populatedCompanyProfileApi() {
         CompanyProfileApi companyProfileApi = new CompanyProfileApi();
         
