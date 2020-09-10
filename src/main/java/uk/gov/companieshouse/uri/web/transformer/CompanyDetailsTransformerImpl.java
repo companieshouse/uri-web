@@ -40,6 +40,8 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     private static final String NO_SIC_AVAILABLE = "None Supplied";
     private static final String PROFILE_LINKS_CHARGES = "charges";
     private static final String OVERSEA_COMPANY = "oversea-company";
+    private static final String COMPANY_STATUS_DISSOLVED = "dissolved";
+    private static final String COMPANY_STATUS_CLOSED = "converted-closed";
     
     private ResourceBundle bundle;
     
@@ -73,7 +75,10 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
             companyDetails.setCountryOfOrigin(transformCompanyJurisdiction(companyProfileApi.getJurisdiction()));
         }
         
-        companyDetails.setDissolutionDate(transformDate(companyProfileApi.getDateOfCessation()));
+        if (isCompanyDissolved(companyProfileApi)) {
+            companyDetails.setDissolutionDate(transformDate(companyProfileApi.getDateOfCessation()));
+        }
+
         companyDetails.setIncorporationDate(transformDate(companyProfileApi.getDateOfCreation()));
         companyDetails.setPreviousNames(transformPreviousNames(companyProfileApi.getPreviousCompanyNames()));
         
@@ -226,6 +231,11 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
     
     private int transformChargeCount(Long count) {      
         return count == null ? 0 : count.intValue();   
+    }
+    
+    private boolean isCompanyDissolved(CompanyProfileApi companyProfileApi) {
+        return COMPANY_STATUS_DISSOLVED.equals(companyProfileApi.getCompanyStatus()) || 
+                COMPANY_STATUS_CLOSED.equals(companyProfileApi.getCompanyStatus());
     }
     
     private String getForeignCompanyRegistryCountry(CompanyProfileApi companyProfileApi) {

@@ -38,6 +38,8 @@ class CompanyDetailsTransformerImplTest {
 
     private static final String OVERSEA_COMPANY = "oversea-company";
     private static final String ENGLAND_WALES_MESSAGE_KEY = "transform.jurisdiction.england-wales";
+    private static final String COMPANY_STATUS_DISSOLVED = "dissolved";
+    private static final String COMPANY_STATUS_CLOSED = "converted-closed";
     
     private CompanyDetailsTransformer testCompanyDetailsTransformer;
 
@@ -86,7 +88,7 @@ class CompanyDetailsTransformerImplTest {
         assertEquals("05448736", companyDetails.getCompanyNumber());
         assertEquals("Test Company Name Limited", companyDetails.getCompanyName());
         assertEquals("01/01/2017", companyDetails.getIncorporationDate());
-        assertEquals("03/02/2020", companyDetails.getDissolutionDate());
+        assertNull(companyDetails.getDissolutionDate());
         assertEquals("transform.status.status-detail", companyDetails.getCompanyStatus());
         assertEquals("transform.type.ltd", companyDetails.getCompanyType());
         assertEquals(ENGLAND_WALES_MESSAGE_KEY, companyDetails.getCountryOfOrigin());
@@ -229,6 +231,36 @@ class CompanyDetailsTransformerImplTest {
         CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
         
         assertEquals(ENGLAND_WALES_MESSAGE_KEY, companyDetails.getCountryOfOrigin());
+    }
+    
+    @Test
+    void profileApiToDetailsDissolvedCompany() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyStatus(COMPANY_STATUS_DISSOLVED);
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals("03/02/2020", companyDetails.getDissolutionDate());
+    }
+    
+    @Test
+    void profileApiToDetailsConvertedClosedCompany() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyStatus(COMPANY_STATUS_CLOSED);
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals("03/02/2020", companyDetails.getDissolutionDate());
+    }
+    
+    @Test
+    void profileApiToDetailsActiveCompany() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        companyProfileApi.setCompanyStatus("anything else");
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertNull(companyDetails.getDissolutionDate());
     }
     
     private CompanyProfileApi populatedCompanyProfileApi() {
