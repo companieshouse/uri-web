@@ -201,7 +201,7 @@ class CompanyDetailsTransformerImplTest {
     @Test
     void profileApiToDetailsOverseaCompanyWithOriginatingRegistryPresent() {
         CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
-        companyProfileApi.setForeignCompanyDetails(foreignCompanyDetails(true, true));
+        companyProfileApi.setForeignCompanyDetails(createForeignCompanyDetailsApi(true, true));
         companyProfileApi.setType(OVERSEA_COMPANY);
 
         CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
@@ -212,7 +212,7 @@ class CompanyDetailsTransformerImplTest {
     @Test
     void profileApiToDetailsOverseaCompanyWithOriginatingRegistryAbsent() {
         CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
-        companyProfileApi.setForeignCompanyDetails(foreignCompanyDetails(true, false));
+        companyProfileApi.setForeignCompanyDetails(createForeignCompanyDetailsApi(true, false));
         companyProfileApi.setType(OVERSEA_COMPANY);
 
         CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
@@ -223,7 +223,7 @@ class CompanyDetailsTransformerImplTest {
     @Test
     void profileApiToDetailsOverseaCompanyWithForeignCompanyDetailsAbsent() {
         CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
-        companyProfileApi.setForeignCompanyDetails(foreignCompanyDetails(false, false));
+        companyProfileApi.setForeignCompanyDetails(createForeignCompanyDetailsApi(false, false));
         companyProfileApi.setType(OVERSEA_COMPANY);
 
         CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
@@ -318,7 +318,7 @@ class CompanyDetailsTransformerImplTest {
         assertEquals(14, mortgageTotals.getNumMortOutstanding());
     }
     
-    private ForeignCompanyDetailsApi foreignCompanyDetails(boolean populateForeignCompanyDetails,
+    private ForeignCompanyDetailsApi createForeignCompanyDetailsApi(boolean populateForeignCompanyDetails,
             boolean populateOriginatingRegistry) {
         
         if (populateForeignCompanyDetails) {
