@@ -8,6 +8,7 @@ import java.util.MissingResourceException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import uk.gov.companieshouse.api.model.charges.ChargesApi;
@@ -79,7 +80,12 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
             companyDetails.setDissolutionDate(transformDate(companyProfileApi.getDateOfCessation()));
         }
 
-        companyDetails.setIncorporationDate(transformDate(companyProfileApi.getDateOfCreation()));
+        if (useIncorporationDate(companyProfileApi)) {
+            companyDetails.setIncorporationDate(transformDate(companyProfileApi.getDateOfCreation()));
+        } else {
+            companyDetails.setRegistrationDate(transformDate(companyProfileApi.getDateOfCreation()));
+        }
+        
         companyDetails.setPreviousNames(transformPreviousNames(companyProfileApi.getPreviousCompanyNames()));
         
         companyDetails.setAccounts(getAccountsDetails(companyProfileApi));
@@ -246,5 +252,15 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
                     .orElse(null);
         }
         return null;
+    }
+    
+    private boolean useIncorporationDate(CompanyProfileApi companyProfileApi) {
+        String companyNumber = companyProfileApi.getCompanyNumber();
+        
+        return companyNumber == null ||
+                companyNumber.startsWith("SC") ||
+                companyNumber.startsWith("OC") ||
+                companyNumber.startsWith("SO") ||
+                StringUtils.isNumeric(companyNumber);
     }
 }

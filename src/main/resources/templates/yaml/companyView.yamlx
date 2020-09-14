@@ -11,7 +11,8 @@ primaryTopic:
   CompanyNumber: [(*{companyNumber})]
   CompanyStatus: [(*{companyStatus})]
   CountryOfOrigin: [(*{countryOfOrigin})]
-  IncorporationDate: [(*{incorporationDate}?:'~')]
+[# th:if="*{registrationDate}"]  RegistrationDate: [(*{registrationDate})][/]
+[# th:if="*{incorporationDate}"]  IncorporationDate: [(*{incorporationDate})][/]
 [# th:if="*{dissolutionDate}"]  DissolutionDate: [(*{dissolutionDate})][/]
 [# th:if="*{!#arrays.isEmpty(previousNames)}"]  PreviousNames:
 [# th:each="previousName : *{previousNames}"]    - CONDate: [(${previousName.ceasedOn}?:'~')]

@@ -87,10 +87,13 @@
 <tr>
     <th>CountryOfOrigin</th><td class="break-in-word" th:text="*{countryOfOrigin}"></td>
 </tr>
+<tr th:if="*{registrationDate}">
+    <th>RegistrationDate</th><td class="break-in-word" th:text="*{registrationDate}"></td>
+</tr>
 <tr th:if="*{dissolutionDate}">
     <th>DissolutionDate</th><td class="break-in-word" th:text="*{dissolutionDate}"></td>
 </tr>
-<tr>
+<tr th:if="*{incorporationDate}">
     <th>IncorporationDate</th><td class="break-in-word" th:text="*{incorporationDate}"></td>
 </tr>
 <tr th:each="previousName : *{previousNames}">

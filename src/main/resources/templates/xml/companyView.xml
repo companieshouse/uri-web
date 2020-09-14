@@ -16,7 +16,8 @@
     <CompanyCategory  th:text="*{companyType}"></CompanyCategory>
     <CompanyStatus th:text="*{companyStatus}"></CompanyStatus>
     <CountryOfOrigin th:text="*{countryOfOrigin}"></CountryOfOrigin>
-    <IncorporationDate th:text="*{xmlDate(incorporationDate)}"></IncorporationDate>
+    <RegistrationDate th:if="*{registrationDate}" th:text="*{xmlDate(registrationDate)}"></RegistrationDate>
+    <IncorporationDate th:if="*{incorporationDate}" th:text="*{xmlDate(incorporationDate)}"></IncorporationDate>
     <DissolutionDate th:if="*{dissolutionDate}" th:text="*{xmlDate(dissolutionDate)}"></DissolutionDate>
     <PreviousNames th:each="previousName : *{previousNames}" th:href="*{'http://data.companieshouse.gov.uk/doc/company/' + companyNumber + '#PreviousNames'}">
       <CONDate th:text="${company.xmlDate(previousName.ceasedOn)}"></CONDate>
