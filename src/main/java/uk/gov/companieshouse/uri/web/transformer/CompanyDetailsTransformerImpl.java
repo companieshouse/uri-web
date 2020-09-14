@@ -80,7 +80,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
             companyDetails.setDissolutionDate(transformDate(companyProfileApi.getDateOfCessation()));
         }
 
-        if (useIncDate(companyProfileApi)) {
+        if (useIncorporationDate(companyProfileApi)) {
             companyDetails.setIncorporationDate(transformDate(companyProfileApi.getDateOfCreation()));
         } else {
             companyDetails.setRegistrationDate(transformDate(companyProfileApi.getDateOfCreation()));
@@ -254,7 +254,7 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         return null;
     }
     
-    private boolean useIncDate(CompanyProfileApi companyProfileApi) {
+    private boolean useIncorporationDate(CompanyProfileApi companyProfileApi) {
         String companyNumber = companyProfileApi.getCompanyNumber();
         
         return companyNumber == null ||
