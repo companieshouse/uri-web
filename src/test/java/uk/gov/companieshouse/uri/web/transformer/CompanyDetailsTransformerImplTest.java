@@ -180,6 +180,20 @@ class CompanyDetailsTransformerImplTest {
     }
     
     @Test
+    void profileApiToDetailsInvalidAccountingReferenceDateApi() {
+        CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
+        AccountingReferenceDateApi accountingReferenceDateApi = new AccountingReferenceDateApi();
+        accountingReferenceDateApi.setDay("99");
+        accountingReferenceDateApi.setMonth("99");
+        companyProfileApi.getAccounts().setAccountingReferenceDate(accountingReferenceDateApi);
+
+        CompanyDetails companyDetails = testCompanyDetailsTransformer.profileApiToDetails(companyProfileApi);
+        
+        assertEquals("", companyDetails.getAccounts().getAccountRefDay());
+        assertEquals("", companyDetails.getAccounts().getAccountRefMonth());
+    }
+    
+    @Test
     void profileApiToDetailsMissingLastAccounts() {
         CompanyProfileApi companyProfileApi = populatedCompanyProfileApi();
         companyProfileApi.getAccounts().setLastAccounts(null);;
