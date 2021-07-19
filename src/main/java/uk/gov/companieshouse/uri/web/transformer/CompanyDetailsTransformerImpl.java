@@ -137,10 +137,10 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
         Accounts accounts = new Accounts();
         CompanyAccountApi apiAccounts = companyProfileApi.getAccounts();
         if (apiAccounts != null) {
-            AccountingReferenceDateApi accountingRefernceDateApi = apiAccounts.getAccountingReferenceDate();
-            if (accountingRefernceDateApi != null) {
-                accounts.setAccountRefDay(accountingRefernceDateApi.getDay());
-                accounts.setAccountRefMonth(accountingRefernceDateApi.getMonth());
+            AccountingReferenceDateApi accountingReferenceDateApi = apiAccounts.getAccountingReferenceDate();
+            if (accountingReferenceDateApi != null) {
+                accounts.setAccountRefDay(transformAccountingRef(accountingReferenceDateApi.getDay()));
+                accounts.setAccountRefMonth(transformAccountingRef(accountingReferenceDateApi.getMonth()));
             }
             accounts.setNextDueDate(transformDate(apiAccounts.getNextDue()));
             LastAccountsApi apiLastAccounts = apiAccounts.getLastAccounts();
@@ -190,6 +190,10 @@ public class CompanyDetailsTransformerImpl implements CompanyDetailsTransformer 
             return "";
         }
         return getValueFromBundle(ACCOUNTS_TYPE_BUNDLE_PREFIX + accountsType);
+    }
+    
+    private String transformAccountingRef(String refDayOrMonth) {
+        return "99".equals(refDayOrMonth) ? "" : refDayOrMonth;
     }
     
     private String getValueFromBundle(String key) {
