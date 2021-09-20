@@ -35,12 +35,14 @@ In order to build and run this Web App locally you will need to install:
 
 ### Configuration
 Required environment variables:
+
 Variable | Description|Example| Default
 -|-|-|-
 `CHS_API_KEY` |The API key to use to authenticate with the CHS APIs (see https://developer.companieshouse.gov.uk). Provided by global env on CHS environment.|`7aPeBkeorUFphM_6PKrMuI-uB9r-3Z92bBe1iTT0`|N/A
 `API_URL`|The URL of the CHS API to use. Provided by global env on CHS environment.|https://api.companieshouse.gov.uk|N/A
 
 Optional environment variables, mainly for links and common Javascript/CSS on error pages:
+
 Variable|Description|Example|Default
 -|-|-|-
 `HUMAN_LOG`        |Output JSON or human readable logs|`0` (JSON), `1` (human readable)| `0`
