@@ -19,7 +19,7 @@
 
         <java.version>1.8</java.version>
         <api-sdk-java.version>4.2.40</api-sdk-java.version>
-        <structured-logging.version>1.9.10</structured-logging.version>
+        <structured-logging.version>1.9.12</structured-logging.version>
         <thymeleaf-layout-dialect.version>2.3.0</thymeleaf-layout-dialect.version>        
         <mock-server.version>5.5.4</mock-server.version>
         <commons-validator.version>1.7</commons-validator.version>
@@ -50,13 +50,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-bom</artifactId>
-                <version>${log4j.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
