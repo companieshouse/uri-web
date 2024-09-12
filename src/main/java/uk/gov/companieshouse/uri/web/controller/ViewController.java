@@ -2,8 +2,8 @@ package uk.gov.companieshouse.uri.web.controller;
 
 import java.nio.charset.StandardCharsets;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
@@ -13,8 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.thymeleaf.ITemplateEngine;
+
 import org.thymeleaf.context.WebContext;
+import org.thymeleaf.ITemplateEngine;
+import org.thymeleaf.web.IWebExchange;
+import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.uri.web.model.CompanyDetails;
@@ -77,47 +80,47 @@ public class ViewController {
 
     @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.html"}, 
             produces = {MediaType.TEXT_HTML_VALUE, MediaType.ALL_VALUE} )
-    public ResponseEntity<String> html(@PathVariable String companyNumber, HttpServletRequest request,
+    public ResponseEntity<String> html(@PathVariable("companyNumber") String companyNumber, HttpServletRequest request,
             HttpServletResponse response) {
         
         return okResponse(renderView(companyNumber, HTML_VIEW, request, response), HTML_RESPONSE_MEDIA_TYPE);
     }
-    
-    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.json"}, 
+
+    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.json"},
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> json(@PathVariable String companyNumber, HttpServletRequest request, 
+    public ResponseEntity<String> json(@PathVariable("companyNumber") String companyNumber, HttpServletRequest request,
             HttpServletResponse response) {
 
         return okResponse(renderView(companyNumber, JSON_VIEW, request, response), JSON_RESPONSE_MEDIA_TYPE);
     }
-    
-    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.rdf"}, 
+
+    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.rdf"},
             produces = APPLICATION_RDFXML)
-    public ResponseEntity<String> rdf(@PathVariable String companyNumber, HttpServletRequest request, 
+    public ResponseEntity<String> rdf(@PathVariable("companyNumber") String companyNumber, HttpServletRequest request,
             HttpServletResponse response) {
 
         return okResponse(renderView(companyNumber, RDF_VIEW, request, response), RDF_RESPONSE_MEDIA_TYPE);
     }
-    
-    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.xml"}, 
+
+    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.xml"},
             produces = {MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_XML_VALUE, APPLICATION_XXML})
-    public ResponseEntity<String> xml(@PathVariable String companyNumber, HttpServletRequest request, 
+    public ResponseEntity<String> xml(@PathVariable("companyNumber") String companyNumber, HttpServletRequest request,
             HttpServletResponse response) {
 
         return okResponse(renderView(companyNumber, XML_VIEW, request, response), XML_RESPONSE_MEDIA_TYPE);
     }
-    
-    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.csv"}, 
+
+    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.csv"},
             produces = {TEXT_CSV, TEXT_COMMA_SEPARATED_VALUES, APPLICATION_CSV, APPLICATION_EXCEL})
-    public ResponseEntity<String> csv(@PathVariable String companyNumber, HttpServletRequest request, 
+    public ResponseEntity<String> csv(@PathVariable("companyNumber") String companyNumber, HttpServletRequest request,
             HttpServletResponse response) {
 
         return okResponse(renderView(companyNumber, CSV_VIEW, request, response), CSV_RESPONSE_MEDIA_TYPE);
     }
-    
-    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.yaml"}, 
+
+    @GetMapping(value = {"{companyNumber:[A-Z0-9]{8}}","{companyNumber:[A-Z0-9]{8}}.yaml"},
             produces = {APPLICATION_YAML, APPLICATION_XYAML, TEXT_YAML, TEXT_XYAML})
-    public ResponseEntity<String> yaml(@PathVariable String companyNumber, HttpServletRequest request, 
+    public ResponseEntity<String> yaml(@PathVariable("companyNumber") String companyNumber, HttpServletRequest request,
             HttpServletResponse response) {
 
         return okResponse(renderView(companyNumber, YAML_VIEW, request, response), YAML_RESPONSE_MEDIA_TYPE);
@@ -127,7 +130,10 @@ public class ViewController {
         CompanyDetails companyDetails = companyService.getCompanyDetails(companyNumber);
         logger.debug(companyDetails.toString());
 
-        WebContext context = new WebContext(request, response, request.getServletContext());
+        IWebExchange webExchange = JakartaServletWebApplication.buildApplication(request.getServletContext())
+                .buildExchange(request, response);
+
+        WebContext context = new WebContext(webExchange);
         context.setVariable(CONTEXT_VAR_NAME, companyDetails);
         
         String rendered = templateEngine.process(viewName, context);
