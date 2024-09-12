@@ -33,6 +33,9 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 
+        <!-- Docker -->
+        <jib-maven-plugin.version>3.4.3</jib-maven-plugin.version>
+
         <!-- Addresses vulnerability in plexus-utils:1.5.5 from sonar-maven-plugin:4.0.0.4121  -->
         <plexus-utils.version>4.0.1</plexus-utils.version>
 
@@ -205,6 +208,22 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
+                <configuration>
+                    <container>
+                        <expandClasspathDependencies>true</expandClasspathDependencies>
+                    </container>
+                    <from>
+                        <image>416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-corretto-build-21:latest</image>
+                    </from>
+                    <to>
+                        <image>416670754337.dkr.ecr.eu-west-2.amazonaws.com/uri-web:latest</image>
+                    </to>
+                </configuration>
             </plugin>
         </plugins>
     </build>
