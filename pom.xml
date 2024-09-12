@@ -34,7 +34,7 @@
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 
         <!-- Docker -->
-        <jib-maven-plugin.version>3.4.3</jib-maven-plugin.version>
+        <jib-maven-plugin.version>3.4.2</jib-maven-plugin.version>
 
         <!-- Addresses vulnerability in plexus-utils:1.5.5 from sonar-maven-plugin:4.0.0.4121  -->
         <plexus-utils.version>4.0.1</plexus-utils.version>
