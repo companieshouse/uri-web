@@ -9,7 +9,7 @@ locals {
   kms_alias                   = "alias/${var.aws_profile}/environment-services-kms"
   lb_listener_rule_priority   = 93
   lb_listener_paths           = ["/doc/company/*"]
-  healthcheck_path            = "/actuator/health" #replace with Healthcheck supplied by scrum team
+  healthcheck_path            = "/uri-web/healthcheck" #replace with Healthcheck supplied by scrum team
   healthcheck_matcher         = "200"
   vpc_name                    = local.stack_secrets["vpc_name"]
   s3_config_bucket            = data.vault_generic_secret.shared_s3.data["config_bucket_name"]
