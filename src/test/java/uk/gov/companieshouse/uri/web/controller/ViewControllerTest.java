@@ -3,9 +3,9 @@ package uk.gov.companieshouse.uri.web.controller;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.eq;
 
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -49,6 +49,9 @@ class ViewControllerTest {
     
     @Mock
     private HttpServletResponse response;
+
+    @Mock
+    private ServletContext context;
     
     @Captor
     ArgumentCaptor<WebContext> contextCaptor;
@@ -59,6 +62,7 @@ class ViewControllerTest {
         companyDetails = new CompanyDetails();
         companyDetails.setCompanyNumber(COMPANY_NUMBER);
         when(companyService.getCompanyDetails(COMPANY_NUMBER)).thenReturn(companyDetails);
+        when(request.getServletContext()).thenReturn(context);
     }
 
     @Test

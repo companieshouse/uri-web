@@ -34,7 +34,6 @@ public class LoggingConfig {
      * @param logger sets a structured logging logger
      * @return new {@link LoggingInterceptor} to enable logging of the request
      */
-    @Bean("loggingInterceptorBean")
     public LoggingInterceptor loggingInterceptor(Logger logger) {
         return new LoggingInterceptor(logger);
     }
