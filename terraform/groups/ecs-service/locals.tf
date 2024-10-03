@@ -8,7 +8,7 @@ locals {
   docker_repo                 = "uri-web"
   kms_alias                   = "alias/${var.aws_profile}/environment-services-kms"
   lb_listener_rule_priority   = 93
-  lb_listener_paths           = ["/doc/company/*"]
+  lb_listener_paths           = ["/*"]
   healthcheck_path            = "/uri-web/healthcheck" #replace with Healthcheck supplied by scrum team
   healthcheck_matcher         = "200"
   vpc_name                    = local.stack_secrets["vpc_name"]
