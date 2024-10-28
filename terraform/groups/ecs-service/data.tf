@@ -37,9 +37,14 @@ data "aws_lb" "service_lb" {
   name = "${var.environment}-chs-uri-web"
 }
 
-data "aws_lb_listener" "service_lb_listener" {
+data "aws_lb_listener" "service_lb_443_listener" {
   load_balancer_arn = data.aws_lb.service_lb.arn
   port = 443
+}
+
+data "aws_lb_listener" "service_lb_80_listener" {
+  load_balancer_arn = data.aws_lb.service_lb.arn
+  port = 80
 }
 
 # retrieve all secrets for this stack using the stack path
