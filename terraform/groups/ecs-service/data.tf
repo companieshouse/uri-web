@@ -42,11 +42,6 @@ data "aws_lb_listener" "service_lb_443_listener" {
   port = 443
 }
 
-data "aws_lb_listener" "service_lb_80_listener" {
-  load_balancer_arn = data.aws_lb.service_lb.arn
-  port = 80
-}
-
 # retrieve all secrets for this stack using the stack path
 data "aws_ssm_parameters_by_path" "secrets" {
   path = "/${local.name_prefix}"
