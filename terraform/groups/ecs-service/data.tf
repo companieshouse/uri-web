@@ -37,9 +37,22 @@ data "aws_lb" "service_lb" {
   name = "${var.environment}-chs-uri-web"
 }
 
-data "aws_lb_listener" "service_lb_listener" {
+data "aws_lb_listener" "service_lb_443_listener" {
   load_balancer_arn = data.aws_lb.service_lb.arn
   port = 443
+}
+
+data "aws_lb_listener" "service_lb_80_listener" {
+  load_balancer_arn = data.aws_lb.service_lb.arn
+  port = 80
+}
+
+data "aws_lb_target_group" "target_group" {
+  name = var.use_fargate ? "${var.environment}-${local.service_name}-far" : "${var.environment}-${local.service_name}"
+
+  depends_on = [
+    module.ecs-service
+  ]
 }
 
 # retrieve all secrets for this stack using the stack path
