@@ -16,8 +16,15 @@ clean:
 	rm -rf ./build-*
 	rm -rf ./build.log-*
 
+.PHONY: test
+test: test-unit test-integration
+
 .PHONY: test-unit
 test-unit: coverage
+
+.PHONY: test-integration
+test-integration: clean
+	mvn verify -Dskip.unit.tests=true
 
 .PHONY: verify
 verify: coverage
