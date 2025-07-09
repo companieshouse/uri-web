@@ -8,11 +8,10 @@ import java.net.URISyntaxException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.junit.Rule;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
@@ -28,9 +27,6 @@ class RedirectControllerTest {
     private static final String VALID_REDIRECT_URI_PREFIX = "http://test-server/doc/company";
     
     private RedirectController testRedirectController;
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
     
     @Mock
     private HttpServletRequest request;
@@ -61,8 +57,7 @@ class RedirectControllerTest {
     void redirectWithInValidRedirectPrefix() throws URISyntaxException {     
         ReflectionTestUtils.setField(testRedirectController, "redirectURIPrefix", INVALID_REDIRECT_URI_PREFIX);
         when(request.getRequestURI()).thenReturn("/id/company/" + COMPANY_NUMBER);
-        
-        exception.expect(URISyntaxException.class);
+
         testRedirectController.redirect(request, response);
     }
 }
