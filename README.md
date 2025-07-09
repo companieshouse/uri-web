@@ -23,7 +23,7 @@ This application is written using the [Spring Boot](http://projects.spring.io/sp
 ### Requirements
 In order to build and run this Web App locally you will need to install:
 
-- [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [Java 21](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - [Maven](https://maven.apache.org/download.cgi)
 
 ### Getting Started
