@@ -4,4 +4,4 @@
 
 PORT=8080
 
-exec java -jar -Dserver.port="${PORT}" "uri-web.jar"
+exec java -jar -Dserver.port="${PORT}" -XX:MaxRAMPercentage=80 "uri-web.jar"
