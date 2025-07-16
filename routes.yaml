@@ -1,5 +1,0 @@
-app_name: uri-web
-group: standalone
-weight: 900
-routes:
-   1: /doc/company/.*

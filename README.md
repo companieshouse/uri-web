@@ -23,7 +23,7 @@ This application is written using the [Spring Boot](http://projects.spring.io/sp
 ### Requirements
 In order to build and run this Web App locally you will need to install:
 
-- [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [Java 21](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - [Maven](https://maven.apache.org/download.cgi)
 
 ### Getting Started
@@ -63,7 +63,7 @@ This is done by calling a [module](https://github.com/companieshouse/terraform-m
 
 Application specific attributes | Value                                | Description
 :---------|:-----------------------------------------------------------------------------|:-----------
-**ECS Cluster**        |public-data-service                                      | ECS cluster (stack) the service belongs to
+**ECS Cluster**        |public-data                                      | ECS cluster (stack) the service belongs to
 **Load balancer**      |{env}-uri-web                                            | The load balancer that sits in front of the service
 **Concourse pipeline**     |[Pipeline link](https://ci-platform.companieshouse.gov.uk/teams/team-development/pipelines/uri-web) <br> [Pipeline code](https://github.com/companieshouse/ci-pipelines/blob/master/pipelines/ssplatform/team-development/uri-web)                               | Concourse pipeline link in shared services
 
