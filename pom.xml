@@ -18,7 +18,7 @@
         <skip.unit.tests>false</skip.unit.tests>
 
         <java.version>21</java.version>
-        <api-sdk-java.version>6.3.1</api-sdk-java.version>
+        <api-sdk-java.version>6.6.3</api-sdk-java.version>
         <structured-logging.version>3.0.34</structured-logging.version>
         <thymeleaf-layout-dialect.version>3.4.0</thymeleaf-layout-dialect.version>
         <mock-server.version>5.15.0</mock-server.version>
@@ -26,8 +26,8 @@
         <opentelemetry-instrumentation-bom.version>2.14.0</opentelemetry-instrumentation-bom.version>
 
         <!-- Spring -->
-        <spring-boot-dependencies.version>3.5.3</spring-boot-dependencies.version>
-        <spring-boot-maven-plugin.version>3.5.3</spring-boot-maven-plugin.version>
+        <spring-boot-dependencies.version>3.5.10</spring-boot-dependencies.version>
+        <spring-boot-maven-plugin.version>3.5.10</spring-boot-maven-plugin.version>
 
         <!-- Maven -->
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
@@ -69,6 +69,17 @@
                 <version>${spring-boot-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.20.0</version>
+            </dependency>
+            <!-- Temporary managed override until spring-boot-starter-logger > 3.5.9 -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>2.25.3</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
