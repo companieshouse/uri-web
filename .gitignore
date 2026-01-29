@@ -26,3 +26,6 @@ hs_err_pid*
 .springBeans
 .settings
 target
+
+# Ignore IntellijIDEA project folder
+.idea/
