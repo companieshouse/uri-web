@@ -60,7 +60,6 @@
             ${project.basedir}/target/dependency-check-report.html
         </sonar.dependencyCheck.htmlReportPath>
         <sonar.java.binaries>${project.basedir}/target</sonar.java.binaries>
-        <log4j.version>2.25.3</log4j.version>
     </properties>
 
     <dependencyManagement>
@@ -84,7 +83,7 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>3.20.0</version>
             </dependency>
-            <!-- Temporary managed override until spring-boot-starter-logger > 3.5.9 -->
+            <!-- Temporary managed override until spring-boot-starter-logger > 3.5.10 -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
