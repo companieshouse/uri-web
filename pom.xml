@@ -18,16 +18,20 @@
         <skip.unit.tests>false</skip.unit.tests>
 
         <java.version>21</java.version>
-        <api-sdk-java.version>6.3.1</api-sdk-java.version>
+        <api-sdk-java.version>6.6.3</api-sdk-java.version>
         <structured-logging.version>3.0.34</structured-logging.version>
         <thymeleaf-layout-dialect.version>3.4.0</thymeleaf-layout-dialect.version>
         <mock-server.version>5.15.0</mock-server.version>
         <commons-validator.version>1.9.0</commons-validator.version>
         <opentelemetry-instrumentation-bom.version>2.14.0</opentelemetry-instrumentation-bom.version>
 
+        <!-- Temporarily overridden dependencies -->
+        <log4j-api.version>2.25.3</log4j-api.version>
+        <commons-lang3.version>3.20.0</commons-lang3.version>
+
         <!-- Spring -->
-        <spring-boot-dependencies.version>3.5.3</spring-boot-dependencies.version>
-        <spring-boot-maven-plugin.version>3.5.3</spring-boot-maven-plugin.version>
+        <spring-boot-dependencies.version>3.5.10</spring-boot-dependencies.version>
+        <spring-boot-maven-plugin.version>3.5.10</spring-boot-maven-plugin.version>
 
         <!-- Maven -->
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
@@ -41,9 +45,13 @@
         <plexus-utils.version>4.0.2</plexus-utils.version>
 
         <!-- Sonar dependency -->
-        <sonar-maven-plugin.version>5.1.0.4751</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+        <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
+        <sonar.login></sonar.login>
+        <sonar.password></sonar.password>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.projectKey>uk.gov.companieshouse:uri-web</sonar.projectKey>
+        <sonar.projectName>uri-web</sonar.projectName>
         <sonar.sources>src/main</sonar.sources>
         <sonar.tests>src/test</sonar.tests>
         <sonar.verbose>true</sonar.verbose>
@@ -51,7 +59,11 @@
             ${project.basedir}/target/site/jacoco/jacoco.xml,
             ${project.basedir}/target/site/jacoco-it/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
-        <log4j.version>2.25.0</log4j.version>
+        <sonar.jacoco.reports>${project.basedir}/target/site</sonar.jacoco.reports>
+        <sonar.dependencyCheck.htmlReportPath>
+            ${project.basedir}/target/dependency-check-report.html
+        </sonar.dependencyCheck.htmlReportPath>
+        <sonar.java.binaries>${project.basedir}/target</sonar.java.binaries>
     </properties>
 
     <dependencyManagement>
@@ -69,6 +81,33 @@
                 <version>${spring-boot-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!-- Temporarily overridden dependencies -->
+            <!--
+                Override dependency to fix CVE-2025-68161
+                Review to see if spring-boot-starter-logging > 3.5.10
+                supplies an updated version of this,
+                allowing removal of this dependency.
+            -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j-api.version}</version>
+            </dependency>
+            <!--
+                Override dependency to fix CVE-2025-48924
+                Review to see if all:
+                - mockserver-client-java > 5.15.0
+                - mockserver-netty > 5.15.0
+                - sonar-maven-plugin > 5.5.0.6356
+                - structured-logging > 3.0.34
+                supply an updated version of this,
+                allowing removal of this dependency.
+            -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -227,16 +266,25 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <append>true</append>
+                    <destFile>${sonar.jacoco.reports}/jacoco.exec</destFile>
+                    <dataFile>${sonar.jacoco.reports}/jacoco.exec</dataFile>
+                    <outputDirectory>${sonar.jacoco.reports}/jacoco</outputDirectory>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>default-prepare-agent</id>
+                        <id>pre-unit-test</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
                     </execution>
                     <execution>
-                        <id>default-report</id>
-                        <phase>prepare-package</phase>
+                        <id>post-unit-test</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
