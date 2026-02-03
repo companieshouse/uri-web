@@ -25,6 +25,10 @@
         <commons-validator.version>1.9.0</commons-validator.version>
         <opentelemetry-instrumentation-bom.version>2.14.0</opentelemetry-instrumentation-bom.version>
 
+        <!-- Temporarily overridden dependencies -->
+        <log4j-api.version>2.25.3</log4j-api.version>
+        <commons-lang3.version>3.20.0</commons-lang3.version>
+
         <!-- Spring -->
         <spring-boot-dependencies.version>3.5.10</spring-boot-dependencies.version>
         <spring-boot-maven-plugin.version>3.5.10</spring-boot-maven-plugin.version>
@@ -78,16 +82,32 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.20.0</version>
-            </dependency>
-            <!-- Temporary managed override until spring-boot-starter-logger > 3.5.10 -->
+            <!-- Temporarily overridden dependencies -->
+            <!--
+                Override dependency to fix CVE-2025-68161
+                Review to see if spring-boot-starter-logging > 3.5.10
+                supplies an updated version of this,
+                allowing removal of this dependency.
+            -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
-                <version>2.25.3</version>
+                <version>${log4j-api.version}</version>
+            </dependency>
+            <!--
+                Override dependency to fix CVE-2025-48924
+                Review to see if all:
+                - mockserver-client-java > 5.15.0
+                - mockserver-netty > 5.15.0
+                - sonar-maven-plugin > 5.5.0.6356
+                - structured-logging > 3.0.34
+                supply an updated version of this,
+                allowing removal of this dependency.
+            -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
