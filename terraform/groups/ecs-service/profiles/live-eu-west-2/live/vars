@@ -11,3 +11,9 @@ min_task_count     = 2
 
 required_cpus = 512
 required_memory = 1024
+
+# task container healthcheck parameters
+task_healthcheck_interval = 60
+task_healthcheck_timeout = 10
+task_healthcheck_retries = 3
+task_healthcheck_start_period = 180
