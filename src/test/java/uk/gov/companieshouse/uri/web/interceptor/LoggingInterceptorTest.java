@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.servlet.ModelAndView;
 import uk.gov.companieshouse.logging.Logger;
@@ -45,6 +46,7 @@ public class LoggingInterceptorTest {
 
     @BeforeEach
     public void setUp() {
+        MockitoAnnotations.openMocks(this);
         interceptor = new LoggingInterceptor(logger);
         when(session.getAttribute(LogContextProperties.START_TIME_KEY.value())).thenReturn(1L);
         when(request.getSession()).thenReturn(session);
