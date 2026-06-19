@@ -23,7 +23,7 @@
         <thymeleaf-layout-dialect.version>3.4.0</thymeleaf-layout-dialect.version>
         <mock-server.version>5.15.0</mock-server.version>
         <commons-validator.version>1.9.0</commons-validator.version>
-        <opentelemetry-instrumentation-bom.version>2.27.0</opentelemetry-instrumentation-bom.version>
+        <opentelemetry-instrumentation-bom.version>2.28.1</opentelemetry-instrumentation-bom.version>
 
         <!-- Temporarily overridden dependencies -->
         <log4j-api.version>2.26.0</log4j-api.version>
@@ -31,8 +31,8 @@
         <kotlin-stdlib.version>2.3.20</kotlin-stdlib.version>
 
         <!-- Spring -->
-        <spring-boot-dependencies.version>3.5.14</spring-boot-dependencies.version>
-        <spring-boot-maven-plugin.version>3.5.14</spring-boot-maven-plugin.version>
+        <spring-boot-dependencies.version>3.5.15</spring-boot-dependencies.version>
+        <spring-boot-maven-plugin.version>3.5.15</spring-boot-maven-plugin.version>
 
         <!-- Maven -->
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
@@ -152,6 +152,10 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <!-- compile -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -170,10 +174,6 @@
                     <artifactId>log4j-to-slf4j</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
