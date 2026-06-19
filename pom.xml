@@ -23,7 +23,7 @@
         <thymeleaf-layout-dialect.version>3.4.0</thymeleaf-layout-dialect.version>
         <mock-server.version>5.15.0</mock-server.version>
         <commons-validator.version>1.9.0</commons-validator.version>
-        <opentelemetry-instrumentation-bom.version>2.28.1</opentelemetry-instrumentation-bom.version>
+        <opentelemetry-instrumentation-bom.version>2.29.0</opentelemetry-instrumentation-bom.version>
 
         <!-- Temporarily overridden dependencies -->
         <log4j-api.version>2.26.0</log4j-api.version>
