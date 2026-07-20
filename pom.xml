@@ -18,7 +18,7 @@
         <skip.unit.tests>false</skip.unit.tests>
 
         <java.version>21</java.version>
-        <api-sdk-java.version>6.6.20</api-sdk-java.version>
+        <api-sdk-java.version>7.1.0</api-sdk-java.version>
         <structured-logging.version>3.0.56</structured-logging.version>
         <thymeleaf-layout-dialect.version>3.4.0</thymeleaf-layout-dialect.version>
         <mock-server.version>5.15.0</mock-server.version>
@@ -28,11 +28,10 @@
         <!-- Temporarily overridden dependencies -->
         <log4j-api.version>2.26.0</log4j-api.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
-        <kotlin-stdlib.version>2.3.20</kotlin-stdlib.version>
 
         <!-- Spring -->
-        <spring-boot-dependencies.version>3.5.15</spring-boot-dependencies.version>
-        <spring-boot-maven-plugin.version>3.5.15</spring-boot-maven-plugin.version>
+        <spring-boot-dependencies.version>4.0.7</spring-boot-dependencies.version>
+        <spring-boot-maven-plugin.version>4.0.7</spring-boot-maven-plugin.version>
 
         <!-- Maven -->
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
@@ -84,29 +83,18 @@
                 <scope>import</scope>
             </dependency>
             <!-- Temporarily overridden dependencies -->
-            <!--
-                Override dependency to fix CVE-2020-29582
-                Review to see if opentelemetry-spring-boot-starter >2.26.0
-                supplies an updated version of this,
-                allowing removal of this dependency.
-            -->
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib</artifactId>
-                <version>${kotlin-stdlib.version}</version>
-                <scope>compile</scope>
-            </dependency>
             <!-- CVE-2026-41293(9.8),
                  CVE-2026-41284(7.5),
                  CVE-2026-43513(7.5),
                  CVE-2026-43512(9.8),
                  CVE-2026-42498(7.3),
                  CVE-2026-43515(9.1)
+                 check if required when spring-boot-dependencies > 4.0.7
               -->
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-core</artifactId>
-                <version>11.0.22</version>
+                <version>11.0.24</version>
                 <scope>compile</scope>
             </dependency>
             <!--CVE-2026-41293(9.8),
@@ -115,38 +103,13 @@
                 CVE-2026-43512(9.8),
                 CVE-2026-42498(7.3),
                 CVE-2026-43515(9.1)
+                check if required when spring-boot-dependencies > 4.0.7
              -->
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-websocket</artifactId>
-                <version>11.0.22</version>
+                <version>11.0.24</version>
                 <scope>compile</scope>
-            </dependency>
-            <!--
-                Override dependency to fix CVE-2025-68161
-                Review to see if spring-boot-starter-logging > 3.5.10
-                supplies an updated version of this,
-                allowing removal of this dependency.
-            -->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>${log4j-api.version}</version>
-            </dependency>
-            <!--
-                Override dependency to fix CVE-2025-48924
-                Review to see if all:
-                - mockserver-client-java > 5.15.0
-                - mockserver-netty > 5.15.0
-                - sonar-maven-plugin > 5.5.0.6356
-                - structured-logging > 3.0.34
-                supply an updated version of this,
-                allowing removal of this dependency.
-            -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -156,14 +119,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- compile -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -263,20 +241,9 @@
         <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <artifactId>spring-boot-webclient-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-webmvc-test</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
     </dependencies>
 
     <build>
