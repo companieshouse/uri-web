@@ -30,8 +30,8 @@
         <commons-lang3.version>3.20.0</commons-lang3.version>
 
         <!-- Spring -->
-        <spring-boot-dependencies.version>4.0.7</spring-boot-dependencies.version>
-        <spring-boot-maven-plugin.version>4.0.7</spring-boot-maven-plugin.version>
+        <spring-boot-dependencies.version>4.1.0</spring-boot-dependencies.version>
+        <spring-boot-maven-plugin.version>4.1.0</spring-boot-maven-plugin.version>
 
         <!-- Maven -->
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
@@ -189,6 +189,41 @@
                 <artifactId>netty-codec-native-quic</artifactId>
                 <version>4.2.16.Final</version>
                 <classifier>windows-x86_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-compression</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http2</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-dns</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http3</artifactId>
+                <version>4.2.16.Final</version>
                 <scope>test</scope>
             </dependency>
             <!-- End of temporarily overridden dependencies -->
