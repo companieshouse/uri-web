@@ -21,7 +21,7 @@
         <api-sdk-java.version>7.1.0</api-sdk-java.version>
         <structured-logging.version>3.0.56</structured-logging.version>
         <thymeleaf-layout-dialect.version>3.4.0</thymeleaf-layout-dialect.version>
-        <mock-server.version>5.15.0</mock-server.version>
+        <mock-server.version>7.1.0</mock-server.version>
         <commons-validator.version>1.9.0</commons-validator.version>
         <opentelemetry-instrumentation-bom.version>2.29.0</opentelemetry-instrumentation-bom.version>
 
@@ -38,6 +38,9 @@
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
 
+        <!-- CH BOMs -->
+        <ch-boms.version>0.1.15</ch-boms.version>
+
         <!-- Docker -->
         <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
 
@@ -45,7 +48,7 @@
         <plexus-utils.version>4.0.3</plexus-utils.version>
 
         <!-- Sonar dependency -->
-        <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
         <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
         <sonar.login></sonar.login>
         <sonar.password></sonar.password>
@@ -72,13 +75,6 @@
                 <groupId>io.opentelemetry.instrumentation</groupId>
                 <artifactId>opentelemetry-instrumentation-bom</artifactId>
                 <version>${opentelemetry-instrumentation-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -110,6 +106,114 @@
                 <artifactId>tomcat-embed-websocket</artifactId>
                 <version>11.0.24</version>
                 <scope>compile</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-epoll</artifactId>
+                <classifier>linux-x86_64</classifier>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-epoll</artifactId>
+                <classifier>linux-aarch_64</classifier>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-classes-epoll</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-unix-common</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-classes-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>linux-x86_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>linux-aarch_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>osx-x86_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>osx-aarch_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>windows-x86_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- End of temporarily overridden dependencies -->
+
+            <!-- No dependencies added below this point (Excluding ch-boms) -->
+            <dependency>
+                <groupId>uk.gov.companieshouse</groupId>
+                <artifactId>ch-dependency-bom</artifactId>
+                <version>${ch-boms.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.companieshouse</groupId>
+                <artifactId>ch-test-bom</artifactId>
+                <version>${ch-boms.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
