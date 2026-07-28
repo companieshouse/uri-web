@@ -107,7 +107,92 @@
                 <version>11.0.24</version>
                 <scope>compile</scope>
             </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-epoll</artifactId>
+                <classifier>linux-x86_64</classifier>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-epoll</artifactId>
+                <classifier>linux-aarch_64</classifier>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-classes-epoll</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-unix-common</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-classes-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>linux-x86_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>linux-aarch_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>osx-x86_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>osx-aarch_64</classifier>
+                <scope>test</scope>
+            </dependency>
+            <!-- review when mockserver-netty > 7.1.0 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-native-quic</artifactId>
+                <version>4.2.16.Final</version>
+                <classifier>windows-x86_64</classifier>
+                <scope>test</scope>
+            </dependency>
             <!-- End of temporarily overridden dependencies -->
+
             <!-- No dependencies added below this point (Excluding ch-boms) -->
             <dependency>
                 <groupId>uk.gov.companieshouse</groupId>
